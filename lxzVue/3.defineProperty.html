@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" >
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        //目的： 把一个数据绑到输入框上，当输入框的值改变了，引起数据的变化（视图改变数据）
+        // 核心靠的是Object.defineProperty 里的get 和 set 方法
+
+        // obj.a = 1;   之前给对象加属性,也可以用Object.defineProperty()来加属性
+        // Object.defineProperty(要加属性的对象，属性名，{配置})
+        let obj = {};  //一个没有实际意义的对象，我们给它加属性，但内部操作的时候要操作temp，不然操作obj 会一直调用它的相应的方法；
+        let temp ={}; //temp 代替obj 取存取
+        Object.defineProperty(obj, 'name', {
+            // value: '1',  //属性值
+            // configurable: true, //是否可配置（可删除）  例如 delete obj.name 删除对象中的某属性，可配置就可以删，不可配置就不能删（删不掉）
+            // writable: true, //是否可写（可重新赋值） obj.name =1000; 无效，改不了值
+            enumerable: false,  //是否可枚举， 不可枚举就无法遍历
+
+            //get()、set()是原生的ES5方法
+            get() {   //取值调用：取obj的属性的时候会触发   eg：obj.name
+                return temp[name]; //这里return的值就是我们 取到的值
+            },
+
+            set(val) {    //赋值调用：给obj的某属性赋值会触发get方法
+                //当我们赋值 obj.name='lxz' 的时候，调用set方法，值就是set的参数val
+                // val就是我们要赋的值，我们把它赋给obj.name
+
+                // obj.name = val;  //****这里我们得到val，不能这样赋值，不然这样（有一次赋值）会再一次调用set方法，这样会一直循环下去
+                // 会报错：Maxumum call  最大调用，死循环了
+
+                // 这里我们可以采用第三方变量temp，我们赋值的时候不去改obj的属性，改temp属性
+                temp[name] = val;
+                oInput.value =val;  //改变数据后，视图里也改变了
+            }
+        }) 
+
+        var oInput = document.getElementsByTagName('input')[0];
+        oInput.value = obj.name;  //页面以加载进来，会调用get方法
+        oInput.addEventListener('input',function(){  //监听input事件
+            obj.name = this.value;   //给obj.name赋值时，调用set方法
+        })
+    </script>
+</body>
+
+</html>

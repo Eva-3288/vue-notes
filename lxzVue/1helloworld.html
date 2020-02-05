@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- moustache  小胡子语法  表达式：都是取值用的，可以放赋值，取值，三元-->
+        {{msg==='hello' ? 1 : 0 }}
+    </div>
+    <!-- vue 可以像jq一样引入 -->
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        //   引入vue后 会给一个Vue的构造函数，我们new Vue() ，这个构造函数 会返给我们一个结果：viewModel
+        let vm = new Vue({   //new的时候传一个对象，返回的结果是一个vm == viewModel
+            // 所有挂在vm上的数据都可以实现双向绑定
+            el: '#app',  //图中的dom
+            //用的querySelector ,当前的vue实例vm 是作用在#app 上的
+            //告知vue能管理哪个部分（当前哪个部分的dom 归vue管理），不能挂载html 和body，要挂载普通元素
+            data: {    //图中的计划好的数据对象，
+                // data中的对象，会被vm所代理，也就是可以通过vm.msg取到对应的内容（取数据 或者 赋值）
+                // 用到的核心点：Object.defineProperty  定义属性
+                msg: 'hello'
+
+            }
+        })
+    </script>
+
+</body>
+
+</html>

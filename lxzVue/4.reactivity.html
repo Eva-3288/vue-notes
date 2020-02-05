@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{arr}}
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            arr:[1,2,3,4]
+        }
+    })
+    vm.arr[0] = 5;   //1.这是错误写法：  改变数组中的某一项，监控不到，因为没法给每一项加getter 和 setter
+    // vm.arr.length -=2;  //2.错误写法，这也是无效的
+    // vm.arr.reverse();  // 用数组的变异方法改变原数组
+    //==变异方法==：push , pop , unshift , shift , sort , reverse , splice, 这些方法可以改变数组
+    vm.arr = vm.arr.map(item => item *= 2);  //filter , map 等，对数组操作后返回新数组，再赋值给原数组
+    </script>
+</body>
+</html>
