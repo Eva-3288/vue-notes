@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 事件的指令 v-on:事件名 = 'fn' -->
+    <!-- v-on:  === @ -->
+    <!-- fn 后面的() 有参数传才写,没有参数传的话不写()-->
+    <!-- fn()这样写会覆盖掉默认传递的事件源对象 为undefined -->
+
+    <!-- 如果不传递参数,就不要写(),会自动传入事件源对象,如果写括号要手动传入$event参数获取 -->
+    <!-- 传参的话,需要event,这样写 fn($event , 1)  $是vue自带的 -->
+
+    <div id="app" v-on:mousedown='fn1' v-on:mouseleave='fn2($event,1)'>点击1</div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+    let vm = new Vue({ //vm
+        el:'#app',
+        //methods 和 data 上的数据会全部放到vm上,而且名字不能冲突,冲突会报错,
+        // methods中的this指向的都是实例vm
+        data:{   //2.但为了好看 好维护,我们常在datal里放数据:字符串 数字 布尔 对象 数组等
+            fn1(){   //1.function 也是数据的一种,放在data里是可以的
+                console.log(event);  //如果 v-on:mousedown='fn1' fn 后面没写()会自动传入event
+            }  
+        },
+        methods:{  //3.把函数放到methods里,和放在data里一样
+            //fn 不可以被重新声明,会报错
+            fn2(a,b){  // 这是es6写法,正常写法是 fn:function(){alert(1)} 省略了:  和func
+                console.log(a);  //这就是传入的事件源对象
+                console.log(b);
+                
+                } 
+        // 这里不要随便用箭头函数,有this的问题,箭头函数没有this ,或向上找 this 指向 window
+        }
+    })
+    </script>
+</body>
+</html>

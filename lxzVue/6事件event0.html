@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div onclick='fn' id='btn'>点击</div>
+    <div id='btn1'>点击</div>
+    <script>
+     function fn(){
+        alert(1)
+    }
+    btn1.onclick = function(){
+        alert(2)
+    }
+    console.log(btn.onclick);
+    console.log(btn1.onclick);
+    </script>
+</body>
+</html>
