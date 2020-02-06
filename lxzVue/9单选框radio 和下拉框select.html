@@ -29,10 +29,13 @@
         {{area}}
         <hr>
         地区(多选):
-        <!--下拉框:1. 如果没写value属性,默认取option中间的值 -->
-        <!--下拉框:2. 请选择这一项要加 disabled-->
-        <!--下拉框:3. 下拉框也是利用v-model 和 value结合使用,如果是单选,v-model的值可以是字符串,数字 -->
-        <!--下拉框:4. 如果下拉框是多选 multiple,v-model的数据类型需要是 数组 类型 -->
+        <!--
+            下拉框:1. 如果没写value属性,默认取option中间的值
+            下拉框:2. 请选择这一项要加 disabled
+            下拉框:3. 下拉框也是利用v-model 和 value结合使用,如果是单选,v-model的值可以是字符串,数字
+            下拉框:4. 如果下拉框是多选 multiple,v-model的数据类型需要是 数组 类型
+        -->
+       
         <select v-model='areas' multiple>
             <option value="0">请选择</option>
             <option value="1">北京</option>
