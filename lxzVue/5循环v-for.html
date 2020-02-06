@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <!-- 要循环谁就在谁的身上加 v-for 属性 -->
+            <li v-for='item of fruits1'>{{item.name}}</li>
+            <hr>
+             <!-- 可以写in  也可以写of ,in = of,建议用in-->
+            <li v-for='(item,index) in fruits1'>{{item.name}}{{index+1}}</li>
+            <hr>
+            <!-- 二维数组 -->
+            <li v-for='(item,index) in fruits2'>{{index+1}}.{{item.name}}
+                <ul>
+                    <li v-for='(item1,index1) in item.chandi'>{{index+1}}.{{index1+1}}{{item1}}</li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- 虽然没啥用,但是v-for除了循环数组,还可以循环字符串,数字,对象 -->
+        <!-- v-for =  '(value,key,index) in obj' -->
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            fruits1:[   //一维数组
+                {name:'苹果'},
+                {name:'橙子'},
+                {name:'西瓜'}
+            ],
+            fruits2:[   //二维维数组:数组里嵌套了数组
+                {name:'苹果',chandi:['山东','云南']},
+                {name:'橙子',chandi:['越南','广西']},
+                {name:'西瓜',chandi:['东北']}
+            ]
+        }
+    })
+    
+
+    // 以前做法：拼字符串然后innerHTML,这样操作dom 重渲染，性能很低
+    // vue提供的指令v-for就解决循环问题的
+    // v-for 会复用原有的结构,是在原来的基础上把新的内容加上去,不是重新渲染,更高效
+    </script>
+</body>
+</html>
