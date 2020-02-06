@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <!-- vue中的键盘修饰符 modifiers -->
+        <!-- 修饰符: @keyup.13   或者  @keyup/enter  和下面的条件判断 event.keyCode ===13 一样 -->
+        <!-- 修饰符:也可以写keyup.a  等任何键盘来触发事件  keyup.a.ctrl 按ctrl+a键 -->
+        <input type="text" v-model='val' @keyup.enter = add>
+        <ul>
+            <li v-for='(item,index) in list'>
+                {{item}}
+                <button @click = 'remove(index)'>删除</button>
+            </li>
+        </ul>
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+    let vm = new Vue({ 
+        el:'#app',
+        data:{   
+            val:'',
+            list:[],
+        }, 
+        methods:{  
+            add(){  //add后面不加括号,会有事件源对象传入
+                // event.keyCode === 13  处理dom细节,回车的时候,
+                if(event.keyCode === 13){   //若干按的是回车键再添加数据
+                    this.list.unshift(this.val);
+                    this.val='';
+                }
+            },
+            remove(i){
+                this.list = this.list.filter((item,index)=>{
+                    return i !== index;   //true的项留下来
+                })
+            }
+        }
+    })
+    </script>
+</body>
+</html>
