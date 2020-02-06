@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <input type="checkbox" v-model = 'a'>{{a}}
+        <!-- 复选框:1. 只有一个复选框的时候,会把v-model的值转化成 boolean 类型,true代表选中 -->
+        <!-- 复选框:2. 只有多个复选框的时候,v-model的值的类型必须是 数组, 并增加value属性 .value的值在数组里是选中状态-->
+        <hr>
+        爱好:
+        <input type="checkbox" v-model='b' value = '游泳'>游泳
+        <input type="checkbox" v-model='b' value = '吃饭'>吃饭
+        <input type="checkbox" v-model='b' value = '睡觉'>睡觉
+        {{b}}
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+    let vm = new Vue({ 
+        el:'#app',
+        data:{   
+            a:'', // ''空字符串会转化为false,所以复选框是未选中状态
+            b:[]  //多个复选框,v-model值是数组类型,结合value属性,value的值在数组里是选中状态
+        }, 
+        methods:{  
+
+        }
+    })
+    </script>
+</body>
+</html>
