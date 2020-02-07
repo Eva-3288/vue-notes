@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+    <div id="app">   
+     <!-- bootstrap就是一个样式表，是栅格化布局默认12列，有一些框架可能是8列或24列等，
+        常见的样式: 基本样式 + 增强样式
+        default -灰色；success-绿色；danger-红色； warning-橙色；info -浅蓝色
+
+        vue的UI框架：iview,mintui,elementui
+    -->
+        <div class="container">
+            <div class="row">
+                <table class="table table-bordered table-hover">
+                    <!-- 表格标题 -->
+                    <caption class="h3 text-center">购物车列表</caption>
+                    <tr>
+                        <th>全选 <input type="checkbox" name="" id=""></th>
+                        <th>商品</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr v-for='(item,index) in lists'>
+                        <td><input type="checkbox" v-model='item.isSelected'></td>
+                        <!-- 动态绑定数据：v-bind:指令  等于  ：
+                        {{}}是不能写在属性里的，可以使用v-bind:属性名 = '属性值是变量' ， 
+                        v-bind: 可以简写为 ：，也就是   ：属性名 = '属性值是变量'
+                        -->
+                        
+                        <td><img :src="item.img" alt="" :title='item.name'>
+                            {{item.info}}</td>
+                        <td>{{item.price}}</td>
+                        <!-- 1. 如果要限制输入框只能输入数字，让type ='number' 
+                             2. input 取出来的值item.num 是字符串类型的123，要想取的值是数字，使用修饰符v-model.number 
+                             3. 修饰符.number 是让输入框的值变成数字类型；.lazy 当输入框失去焦点时更新数据
+                        -->
+                        <td><input type="number" v-model.number="item.num"></td>
+                        <td>{{item.price * item.num}}</td>
+                        <!-- 
+                            数字有小数点时，可以使用  num.toFixed(2)来保留2位小数，但比较麻烦每次要手动添加
+                         -->
+                        <td><button class="btn btn-danger">删除</button></td>
+                    </tr>
+                </table> 
+            </div>
+        </div>
+        
+    </div>
+    <script src="node_modules/axios/dist/axios.js"></script>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+    let vm = new Vue({ 
+        el:'#app',
+
+        created(){  
+           this.initData();
+           
+        },
+        data:{   
+            lists:[],   
+        }, 
+        methods:{  
+            initData(){
+                axios.get('./carts.json').then((res) => {  //成功的回调,limian
+                    // console.log(res.data);
+                    this.lists = res.data;
+                },(err) => {   //失败的回调
+                    console.log(err);
+                })
+            }
+        }
+    })
+    </script>
+</body>
+</html>
