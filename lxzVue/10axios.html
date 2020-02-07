@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+    <div id="app">   
+     
+    </div>
+    <script src="node_modules/axios/dist/axios.js"></script>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        /* 
+        保证地址使用localhost,而不是本地C盘D盘什么的,本地不支持ajax,且可能有跨域问题
+        
+        */
+    let vm = new Vue({ 
+        el:'#app',
+
+        created(){  
+            /* created:
+            1. 专门用来发送ajax的方法, 数据初始化后自动调用created方法
+            2. 而且方法里this也是指向vm实例,methods里面也是数据,也可以在这里 this.方法 取到 
+            3. 钩子函数,
+            */
+
+            // axios 是ajax的库,这个库不依赖vue.js,他是基于promise的
+            // 在window上挂了个axios方法
+
+            axios.get('./carts.json').then((res) => {  //成功的回调,limian
+                console.log(res.data);
+               /*  
+                1.在created里this 指向vm实例
+                2.回调函数中的this都指向window ,这里我们赋值是给实例
+                3.所以我们改用箭头函数,箭头函数没有this 向上一级找,上一级指向实例,所以这里this就指向实例 */
+                this.lists = res.data;
+            },(err) => {   //失败的回调
+                 console.log(err);
+                 
+            })
+
+        },
+        data:{   
+           /* 
+             一般我们的数据都是在json里取的,把这些放到json里,但json里直接粘报错,
+            因为如下格式是对象,对象里不需要加 "双引号" ,但json里需要加双引号.
+            我们可以在浏览器控制台使用方法 JSON.stringify(对象格式数据) 回车得到"json格式数据",注意取数据的时候[]外层的双引号不要
+            */
+           /*  lists:[
+                {
+                    name:'颈椎病康复指南',
+                    isSelected:true,
+                    price:18.8,
+                    num:3,
+                    img:'//img13.360buyimg.com/mobilecms/s144x144_jfs/t1/97280/10/11147/131201/5e2c27e0E0067fae3/e4447f345e5ce5e0.jpg',
+                    info:'出版方:蓝翔技校'
+                }
+            ] */
+
+            lists:[],   
+        }, 
+        methods:{  
+
+        }
+    })
+    </script>
+</body>
+</html>
