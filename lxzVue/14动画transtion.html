@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <style>
+        #box{
+            width:150px;
+            height:80px;
+            background:red;
+            color:#fff;
+        }
+        /* 
+        2.2  transtion 有几个样式，分为进入前，进入后，离开后。他们的class类名是：v-enter,v-enter-active,v-leave-active
+         */
+        .v-enter {opacity:0;}
+        .v-enter-active{
+            /* opacity:0.8;   这里不能写opacity,不然透明度会立刻变成这个值，没有过度 */
+            transition: 1s linear;}
+        .v-leave-active{opacity:0; transition: 1s linear;}
+        /* 2.3 如果有多组，我们用属性name 来进行分组，然后再样式里，v-enter等类名的v- 变成  属性值*/
+        .lxz-enter {opacity:0;}
+        .lxz-enter-active{
+            /* opacity:0.8;   这里不能写opacity,不然透明度会立刻变成这个值，没有过度 */
+            transition: 1s linear;}
+        .lxz-leave-active{opacity:0;transition: 1s linear;}
+    </style>
+</head>
+<body>
+    <div id="app">   
+       <!-- 
+           1. v-if / v-show ='变量' 变量为true显示，为false隐藏
+           2. if 操作的是dom，show操作的是样式display:none;
+           3. 如果频繁的切换dom 使用v-show ,不频繁切换用v-if
+        -->
+        <button @click = 'isShow = !isShow'>{{isShow ? '隐藏' : '显示'}}</button>
+        <transition>
+        <!--2.1 transition 是vue中的组件，不依赖包，vue自己提供的，引入vue后可直接使用 -->
+            <div id="box" v-show='isShow'>元宵快乐</div>
+        </transition>
+        <transition name='lxz'>
+            <!--2.3 transition 如果有多组，我们用属性name 来进行分组，然后再样式里，v-enter等类名的v- 变成  属性值- -->
+                <div id="box" v-show='isShow'>元宵快乐</div>
+            </transition>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+    let vm = new Vue({ 
+        el:'#app',
+        created(){  
+         
+        },
+        data:{   
+            isShow:true,   
+        }, 
+        methods:{  
+           
+         
+        }
+    })
+    </script>
+</body>
+</html>
