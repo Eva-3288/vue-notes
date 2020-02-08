@@ -50,8 +50,10 @@
                         <!-- 1. 如果要限制输入框只能输入数字，让type ='number' 
                              2. input 取出来的值item.num 是字符串类型的123，要想取的值是数字，使用修饰符v-model.number 
                              3. 修饰符.number 是让输入框的值变成数字类型；.lazy 当输入框失去焦点时更新数据
-                        -->
-                        <td><input type="number" v-model.number="item.num"></td>
+                        
+                            min='1' 输入框最小值是1
+                            -->
+                        <td><input type="number" v-model.number="item.num" min='1'></td>
                         <td>{{item.price * item.num | toFixed(2)}}</td>
                         <!-- -------------------3-------------- -->
                         <!-- 
@@ -68,14 +70,20 @@
                             而let a = arr[0], a 里面放的是地址（引用值）或者 原始值，所以 arr[0] 和 数组遍历的某一项比较 是可以相等的，比较的是空间地址
                          -->
                     </tr>
+                    <tr>
+                        <!-- ---------------6--------------- -->
+                        <!-- 1. {{}} 里可以放函数 fn()，也就是函数执行，也就是会把函数执行的结果放在{{}}里
+                            2. {{}} 里放到是函数的执行，当页面数据有变化的时候，这个函数就会重新执行
+                            3. 这个函数只有return返回一个结果
+                            4. {{sum()}}数据一变化就会重新调用此函数，算出最新的结果，但是不会缓存上一次的结果
+                              computed 可以解决这个问题
+
+                            colspan='6' 一列占6列
+                        -->
+                        <td colspan="6">总计：{{sum() | toFixed(2)}}</td>
+                    </tr>
                 </table> 
             </div>
-            <!-- ---------------6--------------- -->
-            <!-- 1. {{}} 里可以放函数 fn()，也就是函数执行，也就是会把函数执行的结果放在{{}}里
-                 2. {{}} 里放到是函数的执行，当页面数据有变化的时候，这个函数就会重新执行
-                 3. 这个函数只有return返回一个结果
-            -->
-            <div class="row">总结：{{sum()}}</div>
         </div>
         
     </div>
@@ -94,7 +102,7 @@
             checkAll:false,  //是否全选
         }, 
         filters:{  //3.1 过滤器，里面可以有好多的自定义过滤器，  用的时候 在数据后面加  | 过滤器方法
-          toFixed(val,num){   //3.2 这里面的this 指向的时window,第一个参数val 是管道符前面的内容
+          toFixed(val,num){   //3.2 这里面的this 指向的时window,第一个参数val 是管道符前面的内容,     用在html 中，和data一起放在{{}}中
               return val.toFixed(num);   //3.3 返回什么就显示什么
           }  
         },
@@ -140,6 +148,9 @@
             如果没有的话cur 从第2个开始，第一个prev是第一项，以后的prev是每次的return */
             sum(){
                 return this.lists.reduce((prev,cur,index,self)=>{   //这里要写return ,要直接返回
+                    if(!cur.isSelected){
+                        return prev;   //如果当前项没被选中，就不加当前这一项
+                    }
                     return prev + cur.price * cur.num;
                 },0)
             }
