@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+    <div id="app">   
+        <div class="container">
+            <div class="row">
+                <table class="table table-bordered table-hover">
+                    <!-- 表格标题  caption-->
+                    <caption class="h3 text-center">购物车列表</caption>
+                    <tr>
+                        <!-- <th>全选 <input type="checkbox" v-model='checkAll'  @change = 'change(checkAll)'></th> -->
+                        <!-- 不用事件写，用计算属性：
+                        1. v-model 先将数据取出来，是个读取的过程，调用checkAll 对象中的get方法 
+                        2. 点击复选框后，修改状态了，我们把这个修改设置到数据中，调用checkAll 对象中的set方法
+                        -->
+                        <th>全选 <input type="checkbox" v-model='checkAll'></th>
+                        <th>商品</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr v-for='(item,index) in lists'>
+                        <td><input type="checkbox" v-model='item.isSelected'></td>
+                        <!-- <td><input type="checkbox" v-model='item.isSelected' @change = 'changeEle()'></td> -->
+                        <td><img :src="item.img" alt="" :title='item.name'>
+                            {{item.info}}</td>
+                        <td>{{item.price}}</td>
+                        <td><input type="number" v-model.number="item.num" min='1'></td>
+                        <td>{{item.price * item.num | toFixed(2)}}</td>
+                        <td><button class="btn btn-danger" @click = del(item)>删除</button></td>
+                    </tr>
+                    <tr>
+                        <!-- <td colspan="6">总计：{{sum() | toFixed(2)}}</td> -->
+                        <!-- {{sum()}} 这样写 没有缓存，不会比较上一次和这次的变化；数据一变会不停的执行 -->
+                        <td colspan="6">总计：{{sum | toFixed(2)}}</td>
+                        <!-- 上面的sum 是一个计算属性，不是方法 -->
+                    </tr>
+                </table> 
+            </div>
+        </div>
+        
+    </div>
+    <script src="node_modules/axios/dist/axios.js"></script>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+    let vm = new Vue({ 
+        el:'#app',
+
+        created(){  
+           this.initData();     
+        },
+        data:{   
+            lists:[],   
+            // checkAll:false,  //是否全选
+        }, 
+        computed:{
+            /*
+            之前的全选是用事件写的，但是我们也可以：
+            1. 页面刷新时，获取的全选值是根据下面的checkbox 来计算的结果给全选赋值的
+            2. 当给全选赋值（点击全选）的时候，要影响其他复选框的变化，
+            
+            computed 是计算属性，是一个对象，放在computed 中最后也会放在vm实例上，不能和methods 和 data里重名
+
+             */
+            /* ------------------ 计算属性1----------------checkAll------
+            1. checkAll 是计算得到的属性（数据）
+            2. checkAll 是一个对象，对象里有2个方法：get 和 set， get 和 set方法里的this 指向vm实例
+            3. v-model = 'checkAll' v-model 取默认值的时候，就是调用get方法得到的
+               根据下面的checkbox的值确定自己的值
+            4.当lists的值改变时，会重新结算
+            */
+            checkAll:{     
+                get(){  //取值-这个值有列表里的复选框决定的，当操作列表复选框的时候重新取值
+                    return this.lists.every(ele => { 
+                        return  ele.isSelected;   //操作列表 - 重新取值：所有都选中，全选才选中
+                    })
+                },set(val){   //赋值-也就是点击这个全选框的时候，给他重新赋值的时候执行哪些操作
+                    this.lists.forEach(ele =>{
+                        ele.isSelected = val;   //操作全选 - 赋值：当给全选重新赋值时，要做的操作
+                    })
+                }
+            },
+            sum:{  //sum的结果会被缓冲，如果依赖的数据没有变化就不会重新执行
+                get(){
+                    return this.lists.reduce((prev,cur)=>{
+                        if(!cur.isSelected){
+                            return prev;
+                        }
+                        return prev + cur.num * cur.price;
+                    },0)
+                }
+            }
+            /*   计算属性可以写对象形式（get,set方法都有），也可以写成方法的形式（只有get方法）
+            sum(){     
+                return ....
+            } */
+        },
+        filters:{  
+          toFixed(val,num){  
+              return val.toFixed(num);   
+          }  
+        },
+        methods:{  
+            initData(){
+                axios.get('./carts.json').then((res) => {  //成功的回调,limian
+                    // console.log(res.data);
+                    this.lists = res.data;
+                    // this.changeEle();  //数据获取完后，给checkAll 赋予默认值
+                },(err) => {   //失败的回调
+                    console.log(err);
+                })
+            },
+            del(item){
+                this.lists = this.lists.filter((ele,index,self)=>{
+                    if(ele !== item){     //4.1也可以简写为：  return ele !== item
+                        return true;
+                    }
+                })
+            },
+            
+           /*// -------------1.1----------------
+           这是用事件写的，这里就没用了，改用计算属性了
+           //-----------这里 放在 set里-----------给他赋值了，要改变下面的
+            change(val){
+                 this.lists.forEach(ele => {   
+                    ele.isSelected = val;     //根据自己的状态 设置其他复选框的状态
+                }) 
+            },
+            //------------这里放在get里-----------下面改变了重新取值
+            changeEle(){  //根据下面的结果确定全选的结果
+                this.checkAll = this.lists.every(ele=>{    
+                    return ele.isSelected;
+                })
+            }, */
+            /*   //---------------------2.1-sum----------------
+            sum(){
+                return this.lists.reduce((prev,cur,index,self)=>{   //这里要写return ,要直接返回
+                    if(!cur.isSelected){
+                        return prev;   //如果当前项没被选中，就不加当前这一项
+                    }
+                    return prev + cur.price * cur.num;
+                },0)
+            } */
+        }
+    })
+    </script>
+</body>
+</html>
