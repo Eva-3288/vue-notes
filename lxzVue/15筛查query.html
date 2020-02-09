@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="node_modules/animate.css/animate.css">
+    <style>
+      
+
+    </style>
+</head>
+<body>
+    <div id="app">   
+        <input type="text" v-model='query'>
+        <!-- 我们要一输入值，就重新计算属性showList,循环的时候就不能用lists了，这是个固定值，不会变 -->
+        <button @click = 'isShow = !isShow'>{{isShow ? '隐藏' : '显示'}}</button>
+            <!-- 1. transition 里面只能包含一个元素，如果多个元素要用 transition-group 
+            2. 里面每一项要加个key,来确定每个div 不一样，不是一个div，动画的时候要区分开东的是哪个
+            3. 属性值是变量，属性名前要加v-bind: (:)，不然会认为属性值就是个字符串
+            -->
+            <!-- bug:当连续两次输入的值一样，因为2 和2 的key值一样，会认为没有变化，没有切入切出，所以没有动画，所以我们要让每次的索引都不一样 
+                v-for默认会复用原有的dom元素，如果增加了key,而且key不同，他认为就是两个人了
+            -->
+            <transition-group enter-active-class='animated fadeInRightBig ' leave-active-class='animated fadeOutLeftBig'>
+                <div id="box" v-show='isShow' v-for ="(item,index) in showList" :key='index'>{{item}}</div>
+                <!-- <ul>
+                    <li v-for='item in lists'>{{item}}</li>
+                </ul> -->
+            </transition-group>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+    let vm = new Vue({ 
+        el:'#app',
+        created(){  
+         
+        },
+        computed:{
+            showList(){   //因为只有取值没有赋值，所以可以简写成方法
+                return  this.lists.filter(ele =>{   //过滤数组，只留下需要的
+                    return ele = this.showList; 
+                })
+            }
+        },
+        data:{   
+            isShow:true,
+            query:'',
+            lists:[1,2,3,4,5]     //目标，搜谁留下谁，其他不要
+        }, 
+        methods:{  
+           
+         
+        }
+    })
+    </script>
+</body>
+</html>
