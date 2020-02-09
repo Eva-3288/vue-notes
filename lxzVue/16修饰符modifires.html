@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">   
+        <!-- 冒泡:
+        1.父子关系，例如：点击grandson元素，会冒泡向上触发child 和parent的点击事件
+        2.阻止冒泡：给孙子添加事件源： e.propagation(); 或者 IE的 e.cancelBubble= true;
+        3. 这个都算是处理事件细节的问题，我们可以使用修饰符
+        4.不想让孙子 点击的时候 冒泡，给孙子加 @事件.stop ='fn'
+        -->
+        <!-- 捕获：和冒泡 相对的是捕获，默认是冒泡
+        1. 设置捕获：二级绑定   xxx.addEventListener('click',fn,true);  //true 是捕获， false是冒泡，默认不写是false-冒泡  
+        2. vue提供修饰符.capture,   给父级加  @事件.capture = 'fn'  ,这样点击父级会一直向下触发事件
+         -->
+         <!-- 捕获和冒泡那个先执行：
+            正常的点击孙子按照冒泡一层一层向上走，但若父级捕获了，点击孙子会先执行捕获的，然后执行孙子，然后向上冒泡执行没有捕获的
+         -->
+       <div class="parent" @click.capture='parent'>
+           parent
+           <div class="child" @click='child'>child
+               <div class="grandson" @click='grandson'>grandson</div>
+           </div>
+       </div>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+    let vm = new Vue({ 
+        el:'#app',
+        data:{   
+           
+        }, 
+        methods:{  
+            parent(){
+                alert('parent');
+            },
+            child(){
+                alert('child');
+            },
+            grandson(){
+                alert('grandson');
+            }
+         
+        }
+    })
+    </script>
+</body>
+</html>
