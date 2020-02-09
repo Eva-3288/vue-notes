@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="node_modules/animate.css/animate.css">
     <style>
         #box{
             width:150px;
@@ -21,12 +22,18 @@
             /* opacity:0.8;   这里不能写opacity,不然透明度会立刻变成这个值，没有过度 */
             transition: 1s linear;}
         .v-leave-active{opacity:0; transition: 1s linear;}
-        /* 2.3 如果有多组，我们用属性name 来进行分组，然后再样式里，v-enter等类名的v- 变成  属性值*/
+        /* 2.3 如果有多组，我们用属性name 来进行分组，然后再样式里，v-enter等类名的'v- '  变成  'name属性值- '  */
         .lxz-enter {opacity:0;}
         .lxz-enter-active{
             /* opacity:0.8;   这里不能写opacity,不然透明度会立刻变成这个值，没有过度 */
             transition: 1s linear;}
         .lxz-leave-active{opacity:0;transition: 1s linear;}
+
+        /*   --------animate.css ------------
+        但在项目里我们经常不像上面一样自己写，推荐一个css库：animate.css 
+        npm 安装：npm install animate.css
+        使用：使用的时候有一个必须要添加的属性 animated--这是个类名
+        */
     </style>
 </head>
 <body>
@@ -45,6 +52,10 @@
             <!--2.3 transition 如果有多组，我们用属性name 来进行分组，然后再样式里，v-enter等类名的v- 变成  属性值- -->
                 <div id="box" v-show='isShow'>元宵快乐</div>
             </transition>
+
+            <transition enter-active-class='animated fadeInRightBig ' leave-active-class='animated fadeOutLeftBig'>
+                    <div id="box" v-show='isShow'>元宵快乐</div>
+                </transition>
     </div>
     <script src="node_modules/vue/dist/vue.js"></script>
     <script>
