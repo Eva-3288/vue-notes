@@ -24,6 +24,7 @@
         let vm = new Vue({ 
         el:'#app',
         computed:{  //computed 默认调用get方法，而且get方法必须有return
+            // 但computed 不支持异步，可以用watch来解决
             checkAll:{
                 get(){
                     return this.lists.every(ele =>{   //return 什么结果，就给checkAll赋值什么

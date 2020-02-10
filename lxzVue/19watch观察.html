@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">   
+      <input type="text" v-model='a'>{{msg}}
+      </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({ 
+        el:'#app',
+        computed:{  //computed 默认调用get方法，而且get方法必须有return
+            // 但computed 不支持异步，可以用watch来解决
+
+        },
+        watch:{  //只有值变化的时候才会触发，支持异步，其他情况建议我们使用computed
+            // 观察a的变化，当a改变后做一件事（执行一个函数）
+            a(newVal , oldVal){   //watch的属性名要和观察的人的名字一致,一变就执行这个方法
+                setTimeout(()=>{
+                    console.log(newVal).length;
+                    
+                    if(newVal.length < 3){
+                        return this.msg = '字数需要大于3位';   //这个return 不是返回，而是结束往下走，其实这里用的else if  不写return也可以
+                    }else if(newVal.length >6){
+                        return this.msg = '字数要小于6位';
+                    }else{
+                        return '';
+                    }
+                },2000)
+            }
+        },
+        data:{
+            a:'',
+            msg:''
+        }
+    })
+    </script>
+</body>
+</html>
