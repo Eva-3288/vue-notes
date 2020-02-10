@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app1">   
+       {{'hello' | myFilter1('lxz')}}
+       <!-- 使用： '数据data' | fn(参数1，参数2) -->
+    </div>
+    <div id="app2">
+        {{'hello' | myFilter1('lxz123')}}
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+       /* 1 .  这里我们写了2个实例：过滤器myFilter是在实例1中定义的，在实例2中无法使用
+        2. 要公用的话，肯定不能放在实例上，要把它挂在构造函数Vue上，Vue.filter(函数名，函数)
+        3. 放在构造函数上后，new的每个实例，都会有这个方法--这叫：全局过滤器
+        4. 全局过滤器要放在页面的顶部，在new之前挂载好
+        */
+        Vue.filter('myFilter1',(data,name)=>{   //filter 没有s，要一个一个的挂载
+            return data + name ;
+        })
+        let vm1 = new Vue({ 
+        el:'#app1',
+        filters:{
+            // 定义：过滤器名称fn(要过滤的数据data，参数1，参数2){return  操作}
+            myFilter(data,name){
+               return data + name;
+            }
+        }
+    })
+    let vm2 = new Vue({ 
+        el:'#app2',
+        
+    })
+    </script>
+</body>
+</html>
