@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">   
+      全选 <input type="checkbox" v-model='checkAll'>
+      <hr>
+      <input type="checkbox" v-for='item in lists' v-model='item.isSelected'>
+      <br>
+      <br>
+      <br>
+      <hr>
+      <input type="text" v-model='a'>{{msg}}
+      <!-- 根据输入框的值，算出一个错误信息  -->
+      </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({ 
+        el:'#app',
+        computed:{  //computed 默认调用get方法，而且get方法必须有return
+            checkAll:{
+                get(){
+                    return this.lists.every(ele =>{   //return 什么结果，就给checkAll赋值什么
+                        return ele.isSelected == true;
+                    })
+                },set(val){    //val是给checkAll赋值的时候传递过来的
+                    this.lists.forEach(ele =>{
+                        ele.isSelected = val;
+                    })
+                }
+            },
+            msg(){
+                if(this.a.length < 3){
+                    return '字数需要大于3位';
+                }else if(this.a.length >6){
+                    return '字数要小于6位';
+                }else{
+                    return '';
+                }
+            }
+        },
+        data:{
+            a:'',
+            lists:[
+                {isSelected: true,name:'书'},
+                {isSelected: false,name:'包'},
+            ]
+        }
+    })
+    </script>
+</body>
+</html>
