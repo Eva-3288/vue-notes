@@ -15,19 +15,49 @@
         3. 这个都算是处理事件细节的问题，我们可以使用修饰符
         4.不想让孙子 点击的时候 冒泡，给孙子加 @事件.stop ='fn'
         -->
-        <!-- 捕获：和冒泡 相对的是捕获，默认是冒泡
-        1. 设置捕获：二级绑定   xxx.addEventListener('click',fn,true);  //true 是捕获， false是冒泡，默认不写是false-冒泡  
-        2. vue提供修饰符.capture,   给父级加  @事件.capture = 'fn'  ,这样点击父级会一直向下触发事件
-         -->
-         <!-- 捕获和冒泡那个先执行：
-            正常的点击孙子按照冒泡一层一层向上走，但若父级捕获了，点击孙子会先执行捕获的，然后执行孙子，然后向上冒泡执行没有捕获的
-         -->
-       <div class="parent" @click.capture='parent'>
-           parent
+         冒泡：默认
+       <div class="parent" @click='parent'>parent
            <div class="child" @click='child'>child
                <div class="grandson" @click='grandson'>grandson</div>
            </div>
        </div>
+        <!-- 捕获：和冒泡 相对的是捕获，默认是冒泡
+        1. 设置捕获：二级绑定   xxx.addEventListener('click',fn,true);  //true 是捕获， false是冒泡，默认不写是false-冒泡  
+        2. vue提供修饰符.capture,   给父级加  @事件.capture = 'fn'  ,这样点击父级会一直向下触发事件
+         -->
+         捕获：.capture
+<!--          <div class="parent" @click.capture='parent'>parent
+            <div class="child" @click.capture='child'>child
+                <div class="grandson" @click.capture='grandson'>grandson</div>
+            </div>
+        </div> -->
+        捕获 和 冒泡：
+        <!-- 捕获 和 冒泡：点击孙子，先执行有捕获的，然后按冒泡执行没有捕获的，弹出parent -grandson -child  -->
+  <!--       <div class="parent" @click.capture='parent'>parent
+           <div class="child" @click='child'>child
+               <div class="grandson" @click='grandson'>grandson</div>
+           </div>
+       </div> -->
+       阻止捕获 或 冒泡（阻止事件传播）: 点击孙子，跳出parent，然后就不再传播了
+  <!--      <div class="parent" @click.capture.stop='parent'>parent
+        <div class="child" @click='child'>child
+            <div class="grandson" @click='grandson'>grandson</div>
+        </div> -->
+        -----------.self----------
+        <div class="parent" @click='parent'>parent
+            <div class="child" @click.self='child'>child
+                <div class="grandson" @click='grandson'>grandson</div>
+            </div>
+        </div>
+        ------------stop------------
+        <div class="parent" @click='parent'>parent
+            <div class="child" @click.stop='child'>child
+                <div class="grandson" @click='grandson'>grandson</div>
+            </div>
+        </div>
+        ----------prevent----------
+        <a href="http://baidu.com" @click.prevent='child'>1111</a>
+    </div>
     </div>
     <script src="node_modules/vue/dist/vue.js"></script>
     <script>
