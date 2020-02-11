@@ -10,17 +10,72 @@
 </head>
 <body>
     <div id="app">   
+      <!-- 导航条 -->
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">  
+              <!--navbar-default默认颜色是灰色，navbar-inverse 是反色，黑色的 
+                container-fluid -容器的流式布局，为了以后里面的子元素都是横向的，所以加的container-fluid -->
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+              TodoList
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- 面板 -->
+      <div class="container">
+          <div class="row">
+              <div class="col-md-9 col-md-offset-1">
+                    <!-- 让面板居中： 把面板放到这个容器里，container 会根据显示器大小确定宽度：1170 > 970 > 750 > 自动
+                    row 是指定行布局，bootstrap是栅格化布局，col-md-12 在中型屏幕下占12列，md-中型屏幕，lg-大型   xs,sm 
+                    col-md-6 col-md-offset-3  占6列，然后偏移3列-->
+                    <!-- 面板开始 -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-danger">你好~，你有x件事要完成！</h4>
+                            <input type="text form-control" v-model='val'>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="nav nav-pills  btn-sm">
+                                <li role="presentation" class="active"><a href="#">全部</a></li>
+                                <li role="presentation"><a href="#">已完成</a></li>
+                                <li role="presentation"><a href="#">未完成</a></li>
+                              </ul>
+                        </div>
+                        <div class="panel-footer">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <input type="checkbox">
+                                    唱歌
+                                    <button class='pull-right btn btn-danger btn-xs'>&times;</button>
+                                    <!-- &times; 是 HTML 的实体字符， X乘号，手写的X可能会不齐
+                                    pull-right是float：right; 浮动后会脱离文档流后，没办法撑开高度了，有2种方案：清除浮动clearfix   或者 btn 变小点 -->
+                                </li>
+                              </ul>
+                        </div>
+                    </div>
+                  <!-- 面板结束 -->
+                </div>
+          </div>
+      </div>
       
         
     </div>
     <script src="node_modules/axios/dist/axios.js"></script>
     <script src="node_modules/vue/dist/vue.js"></script>
     <script>
-    let vm = new Vue({ 
+    目标：1.将数据循环到页面上
+    2.回车添加数据到列表()
+    let vm = new Vue({   // 这里let/const都可以
         el:'#app',
         data:{   
-            lists:[],   
-            // checkAll:false,  //是否全选
+            val:'',
+            lists:[
+                {isSelected:true,title:'唱歌'},
+                {isSelected:true,title:'吃饭'},
+                {isSelected:true,title:'睡觉'}
+            ],   
         }, 
    
 
