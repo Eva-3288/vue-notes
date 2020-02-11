@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <style>
+        .red{
+        background: red;
+        }
+        .blue{
+        background: blue;
+        }
+        .green{
+        background: green;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">   
+           <!-- 默认情况下再切换dom时相同的结构会被复用，如果不需要复用，需要加key -->
+           <!--  :key='1'  有冒号，里面时变量，这是数字1，    key='1'  没有冒号就是字符串1-->
+           <!-- v-bind: 动态绑定'属性',class 或style 使用两种方式写：对象 或 数组 -->
+ 
+         <div class="x y" :class="flag ? 'z':'' ">111</div>
+         <!-- :class绑定的样式 和 class绑定的不冲突 ，:class的值可以时对象或者数组
+        对象： :class="{z:flag,y:true}"   注意{}放在“”里，值true生效
+        数组： :class="[class1,class2,'m']"    class1/class2是变量，m不是变量，就是类名
+        -->
+
+         <div class="x" :class="{z:flag,y:true}">111</div>
+         <div class="x" :class="[class1,class2,'m']">222</div>
+         <div class="x" :class="[class1,class2,{m:false}]">222</div>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({ 
+        el:'#app',
+        
+        data:{
+            class1:'y',
+            class2:'z',
+            flag:true,
+        }
+    })
+    </script>
+</body>
+</html>

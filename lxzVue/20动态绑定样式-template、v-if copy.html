@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">   
+        <template v-if='false'>
+            <div>111</div>
+            <div>222</div>
+            <div>333</div>
+        </template>
+      
+       <div>hello</div>
+       <hr>
+       <button @click='flag = !flag'>切换</button>
+       <template v-if='flag'>
+           <label for="">登录</label>
+           <input type="text" key='1'>
+           <!-- 默认情况下再切换dom时相同的结构会被复用，如果不需要复用，需要加key -->
+           <!--  :key='1'  有冒号，里面时变量，这是数字1，    key='1'  没有冒号就是字符串1-->
+        </template>
+        <template v-else>
+            <label for="">注册</label>
+            <input type="text" key='2'>
+         </template>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({ 
+        el:'#app',
+        
+        data:{
+            flag:true,
+        }
+    })
+    </script>
+</body>
+</html>

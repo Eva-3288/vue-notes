@@ -22,22 +22,21 @@
         watch:{  //只有值变化的时候才会触发，支持异步，其他情况建议我们使用computed
             // 观察a的变化，当a改变后做一件事（执行一个函数）
             a(newVal , oldVal){   //watch的属性名要和观察的人的名字一致,一变就执行这个方法
+                this.msg = 'waiting......';   //，得到最终结果前，设置中间状态
                 setTimeout(()=>{
-                    console.log(newVal).length;
-                    
-                    if(newVal.length < 3){
-                        return this.msg = '字数需要大于3位';   //这个return 不是返回，而是结束往下走，其实这里用的else if  不写return也可以
+                    if(newVal.length < 3 && newVal.length >0){ 
+                         this.msg = '字数需要大于3位';   //这个return 不是返回，而是结束往下走，其实这里用的else if  不写return也可以
                     }else if(newVal.length >6){
-                        return this.msg = '字数要小于6位';
+                        this.msg = '字数要小于6位';
                     }else{
-                        return '';
+                        this.msg = '';
                     }
-                },2000)
+                },10)
             }
         },
         data:{
             a:'',
-            msg:''
+            msg:''   //这个值是页面一开始进入时的值
         }
     })
     </script>
