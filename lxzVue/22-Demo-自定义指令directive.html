@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <style>
+        .div1{
+            position:absolute;
+            width:100px;
+            height:100px;
+            background: peru;
+            /* top:150px;
+            left:100px; */
+        }
+    </style>
+</head>
+<body>
+    <div id="app">   
+        <button v-color='colorName'>变色</button>
+        <div v-drag class = 'div1'>拖拽</div>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({ 
+        el:'#app',
+        directives:{
+            /* 1.v-color 是自定义指令，定义的时候可以写v-color 也可以简写为color
+            2.color是一个方法，用来操作dom的，所以第一参数是指令所对应的元素 */
+            color(el,bindings){
+                console.log(bindings);
+                //  {name: "color", rawName: "v-color", value: "red", expression: "colorName", modifiers: {…}, …}
+                el.style.background = bindings.value;
+            },
+            drag(el){  //v-drag没有属性值，所以没有第二个参数
+                el.onmousedown = function(e){  //鼠标按下的时候调用事件，使用 事件源对象e
+                    let disX = e.pageX - el.offsetLeft ;  //点击点距div左侧距离 = 点击点据页面左侧距离 - div距页面左侧距离
+                    let disY = e.pageY - el.offsetTop ;
+                    // 鼠标按下的时候，获取鼠标据div左侧 和 顶部的距离
+                    document.onmousemove = function(e){
+                        el.style.left = e.pageX - disX + 'px';
+                        el.style.top = e.pageY - disY + 'px';
+                    }
+                    document.onmouseup = function(){   //鼠标抬起的时候，情况鼠标按下 和 移动时的事件
+                        document.onmousedown = document.onmousemove = null ;
+                    }
+                    e.preventDefault();    //阻止默认事件
+                }
+            }
+        },
+        data:{
+            colorName:'red',
+        }
+    })
+    </script>
+</body>
+</html>

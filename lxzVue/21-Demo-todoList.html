@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <style>
+        .del{
+            text-decoration:line-through;
+            color:#777;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">   
+      <!-- 导航条 -->
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">  
+              <!--navbar-default默认颜色是灰色，navbar-inverse 是反色，黑色的 
+                container-fluid -容器的流式布局，为了以后里面的子元素都是横向的，所以加的container-fluid -->
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+              TodoList
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- 面板 -->
+      <div class="container">
+          <div class="row">
+              <div class="col-md-9 col-md-offset-1">
+                    <!-- 让面板居中： 把面板放到这个容器里，container 会根据显示器大小确定宽度：1170 > 970 > 750 > 自动
+                    row 是指定行布局，bootstrap是栅格化布局，col-md-12 在中型屏幕下占12列，md-中型屏幕，lg-大型   xs,sm 
+                    col-md-6 col-md-offset-3  占6列，然后偏移3列-->
+                    <!-- 面板开始 -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-danger">你好~，你有{{num}}件事要完成！</h4>
+                            <input type="text form-control" v-model='val' @keyup.enter='add'>
+                        <!-- 1.点击回车触发，回车是键盘事件，不能用click-是鼠标事件，
+                             2. 而且.13 / .enter 是键盘修饰符，要用keyup/keydown ，而keydown按下的时候，值还未输入到框内，keydown 一般会比keyup少一个单词
+                              所以最好用keyup , keyup.13  /  keyup.enter-->
+                        </div>
+                        <div class="panel-body">
+                            <ul class="nav nav-pills  btn-sm">
+                                <li role="presentation" class="active"><a href="#">全部</a></li>
+                                <li role="presentation"><a href="#">已完成</a></li>
+                                <li role="presentation"><a href="#">未完成</a></li>
+                              </ul>
+                        </div>
+                        <div class="panel-footer">
+                            <ul class="list-group">
+                                <li class="list-group-item" v-for='(item,index) in lists'> 
+                                    <input type="checkbox" v-model='item.isSelected' v-show='dblItem != item'>
+                                    <span :class="{del:item.isSelected}"  @dblclick='remember(item)'  v-show='dblItem != item'>{{item.title}}</span>
+                                    <!-- 双击文字变输入框：1.双击的时候记住这一项，把这一项放到一个变量dblItem里；
+                                        2.在遍历的时候，比较变量dblItem里的值 和当前item是否相等，相等就说明是点击的当前项，当前项变输入框 -->
+                                    <input type="text" v-model='item.title' v-show='dblItem == item' @keyup.enter ='cancel' @blur='cancel' v-focus = 'dblItem == item'>
+                                    <!-- 1.v-show:--因为列表里有很多项，多次点击多个列的化，会频繁操作dom， 所以此处推荐用v-show -->
+                                    <!-- 2. @keyup.enter / @blur ---输入框按回车，或失去焦点的时候，两个事件可以一起写,回车 和 失去焦点的前提时，它得获得先焦点 
+                                         3. v-focus -- 这是自定义指令，传的值时true/ false,  当点击的时当前项的时候获取焦点-->
+                                    <button class='pull-right btn btn-danger btn-xs' @click='del(item)'>&times;</button>
+                                    <!-- &times; 是 HTML 的实体字符， X乘号，手写的X可能会不齐
+                                    pull-right是float：right; 浮动后会脱离文档流后，没办法撑开高度了，有2种方案：清除浮动clearfix   或者 btn 变小点 -->
+                                </li>
+                              </ul>
+                        </div>
+                    </div>
+                  <!-- 面板结束 -->
+                </div>
+          </div>
+      </div>
+      
+        
+    </div>
+    <script src="node_modules/axios/dist/axios.js"></script>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+/*     目标：1.将数据循环到页面上
+    2.回车添加数据到列表(同时加入isSelected属性)
+    3. 删除功能
+    4. 计算没有被选中的个数 
+    5.双击修改某列*/
+    let vm = new Vue({   // 这里let/const都可以
+        el:'#app',
+        data:{   
+            val:'',
+            dblItem:'',   //记录双击的那一项
+            lists:[
+                {isSelected:true,title:'唱歌'},
+                {isSelected:false,title:'吃饭'},
+                {isSelected:true,title:'睡觉'}
+            ],   
+        }, 
+        computed:{   //computed 是一个对象，目前只有created 是一个函数，其他都是对象
+            num(){
+                let i = 0;
+                this.lists.forEach(ele => {
+                    if(!ele.isSelected){
+                        i++;
+                    }
+                })
+                return i;
+                //方法2： 也可以把没选中的留下，然后取length
+                // return this.lists.filter(ele => {return !ele.isSelected}).length;
+            }
+        },
+        directives:{
+            focus(el,bindings){
+                if(bindings.value){
+                    el.focus();   //获取焦点
+                }
+            }
+        },
+        methods:{
+            add(){
+                this.lists.unshift({isSelected:false,title:this.val});
+                this.val = '';
+            },
+            del(item){
+                this.lists = this.lists.filter(ele =>{
+                    return item != ele;   //过滤：返回true的留到新数组中
+                })
+            },
+            remember(item){
+                this.dblItem = item;
+            },
+            cancel(){
+                this.dblItem = '';
+            }
+        }
+    })
+    </script>
+</body>
+</html>
