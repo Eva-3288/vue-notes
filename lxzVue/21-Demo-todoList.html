@@ -47,14 +47,20 @@
                         </div>
                         <div class="panel-body">
                             <ul class="nav nav-pills  btn-sm">
-                                <li role="presentation" class="active"><a href="#">全部</a></li>
-                                <li role="presentation"><a href="#">已完成</a></li>
-                                <li role="presentation"><a href="#">未完成</a></li>
+                                <!-- 使用hash记录状态，这样页面刷新的时候页面还是在当前页面（记住了当前的状态）全部-all 已完成-finished  未完成-unfinished
+                                 href="/all" 这样直接写/all 是相对根路径下加 /all
+                                href="#/all" 我们希望在当前链接后面加/all 就使用  href="#/all" -->
+
+                                <!-- 然后根据url中的hash值表示去获取不同的数据，如何判断当前点击的是那个按钮，也是根据hash去判断
+                                我们去监听 hash的变化 -->
+                                <li role="presentation" :class="{active: hash ==='all'}"><a href="#/all">全部</a></li> 
+                                <li role="presentation" :class="{active: hash ==='finished'}"><a href="#/finished">已完成</a></li>
+                                <li role="presentation" :class="{active: hash ==='unfinished'}"><a href="#/unfinished">未完成</a></li>
                               </ul>
                         </div>
                         <div class="panel-footer">
                             <ul class="list-group">
-                                <li class="list-group-item" v-for='(item,index) in lists'> 
+                                <li class="list-group-item" v-for='(item,index) in filterLists'> 
                                     <input type="checkbox" v-model='item.isSelected' v-show='dblItem != item'>
                                     <span :class="{del:item.isSelected}"  @dblclick='remember(item)'  v-show='dblItem != item'>{{item.title}}</span>
                                     <!-- 双击文字变输入框：1.双击的时候记住这一项，把这一项放到一个变量dblItem里；
@@ -84,18 +90,46 @@
     2.回车添加数据到列表(同时加入isSelected属性)
     3. 删除功能
     4. 计算没有被选中的个数 
-    5.双击修改某列*/
+    5.双击修改某列
+    6.将修改保存到localStorage,刷新依然同步数据*/
     let vm = new Vue({   // 这里let/const都可以
         el:'#app',
         data:{   
             val:'',
             dblItem:'',   //记录双击的那一项
+            hash:'',
             lists:[
                 {isSelected:true,title:'唱歌'},
                 {isSelected:false,title:'吃饭'},
                 {isSelected:true,title:'睡觉'}
             ],   
         }, 
+        created(){   //这是一个方法，初始化数据，ajax获取
+            this.lists = JSON.parse(localStorage.getItem('data') )  || this.lists;
+            //localStorage 存的是字符串，取的时候也是字符串，用JSON.parse(字符串) 变成对象
+            // 如果没存过localStorage,取值取到null, 没有的话，就取默认的lists
+            // ----------------------------------------------------------
+
+             // 页面有hash了，刷新页面但没有改变hash，也要获取hash
+             this.hash = window.location.hash.slice(2) || 'all';   //如果有hash，截取掉2未，slice改变原数组，没有的话取all
+            // 页面一加载的时候，监听hash值的变化，hash值变化 是BOM（浏览器）的行为，在window上加事件监听
+            window.addEventListener('hashchange',() => {   //监控hash值的变化，事件绑完就不销毁了
+            // 这样写，是window调用方法,那里面的this指向window,所以我们使用箭头函数，这样它自己没有this,她往外一层找this指向vm实例
+                // hashchange是事件名，事件名子都小写
+                this.hash =  window.location.hash.slice(2);   //这里必须是箭头函数，不然this指向window  不是vm实例
+            },false)
+           
+
+        },
+        watch:{
+            lists:{   //watch监听的普通写法，默认只能监听一层，里面的子对象变化时，地址没变会认为没变化，可以使用 深度监听
+                handler(){  //之前的lists(){} 就是默认只写handler方法的简写
+                    //lists一改变，就把改变后的lists存到localStorage里
+                    localStorage.setItem('data',JSON.stringify(this.lists));
+                    // localStorage 存值需要是字符串格式，使用JSON.stringify(对象变量)将对象变成字符串格式
+                },deep:true
+            }
+        },
         computed:{   //computed 是一个对象，目前只有created 是一个函数，其他都是对象
             num(){
                 let i = 0;
@@ -107,6 +141,12 @@
                 return i;
                 //方法2： 也可以把没选中的留下，然后取length
                 // return this.lists.filter(ele => {return !ele.isSelected}).length;
+            },
+            filterLists(){   //数据列表 是根据hash 计算出来的,列表的值
+                if(this.hash == 'all') return this.lists;   //if判断 如果就一行执行代码可以省略{}
+                if(this.hash == 'finished') return this.lists.filter(ele =>  ele.isSelected);  //箭头函数 如果没有return  可以省略{}
+                if(this.hash == 'unfinished') return this.lists.filter(ele => {return !ele.isSelected} );
+                
             }
         },
         directives:{
