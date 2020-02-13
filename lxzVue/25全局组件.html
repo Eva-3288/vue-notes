@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <my-div></my-div>
+       <!--  组件名不要带有大写（最多可以首字母大写)，多个单词用中划线（蛇形/烤串命名发），
+        组件名 和定义名字要相同
+        html中采用短横线隔开命名法，js中转小驼峰也是可以的 -->
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        // 项目很庞大的时候，希望开发的时候能分模块开发，就像现在提倡的组件化开发
+        // 根据功能---组件分两类：页面级组件  /  基础组件 - 将可复用的部分抽离出来
+        // 根据用法---组件分为：全局组件-声明一次，在任何地方使用  /  局部组件-必须告诉这个组件属于谁
+        // 一般写插件的时候，用全局组件多一些；全局是声明在类上的，局部声明在实例上；Vue.filter()--全局的
+
+        // 一个自定义标签 - vue就会把他看成一个组件，vue可以给这些标签赋予一定的意义
+        let vm = new Vue({  
+        el:'#app',  
+        data:{
+            a:'hello',
+            arr:[1,2,3],
+        },
+
+    })
+    Vue.component('my-div',{       //'my-div'是组件名， 一个对象可以看成一个组件
+        template:'<div>{{msg}}</div>',   //在自己的模板中使用自己的数据；  用模板里的内容，替换掉<my-div></my-div>
+        data(){ //组件中的数据必须是函数类型的，return返回一个实例 对象 作为组件的数据
+            return {
+                msg:'你好'
+            }
+        }
+    })
+    </script>
+</body>
+</html>
