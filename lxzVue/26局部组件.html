@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <comp></comp>
+       <!-- 33.使用组件 -->
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+    //   局部组件使用三部曲：1.创建组件   2.注册组件  3.使用组件
+    let comp = { template:'<div>你好</div>'};  //1.创建组件，组件就是一个对象，里面必须有template属性
+
+    let vm = new Vue({  
+        el:'#app',  
+        components:{
+            comp,   //2.注册组件，comp:comp,  es6中名字一样可以简写为 comp
+        }
+    })
+    </script>
+</body>
+</html>
