@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <p ref='myp'>{{a}}</p>
+        <p ref='myp'>{{a}}</p>
+        <hr>
+        <ul ref='myul'>
+            <li v-for = 'a in arr' ref='myli'>{{a}}</li>
+        </ul>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({  
+        el:'#app',  
+        data:{
+            a:'hello',
+            arr:[1,2,3],
+        },
+        mounted(){   //mounted 用来操作dom
+            
+            /* $ 是指自己的属性，
+            this.$refs  所有有ref属性元素的集合-获取dom
+            this.$data  vm上的数据
+            this.$watch 监控
+            this.$set  后加的属性实现响应式变化
+            this.$el  当前el元素
+            his.$options  vm实例上的所有 属性  el/data/filters/components等等
+            this.$nextTick  保证dom渲染完后再执行后面的代码，因为dom渲染是异步的
+            */
+            // console.log(vm);    这样写会报错：ReferenceError: Cannot access 'vm' before initialization
+             this.$nextTick(() => {    //异步方法，等待渲染dom完成后再获取vm
+                 console.log(vm);
+             })
+
+             console.log(this.$refs.myp);   
+             console.log(this.$refs.myli);  //(3) [li, li, li]
+            //  如果dom元素不是通过v-for循环出来的，只能获取到一个，通过v-for循环出来的可以获取多个
+
+            this.arr = [1,2,3,4];
+            console.log(this.$refs.myul);   //dom渲染（视图刷新）是异步的，此时这里还是123的dom,用debugger看，console 不太准
+            // debugger;
+            console.log(this.$refs.myul.children);
+            console.log(this.$refs.myul.children.length);
+            //dom映射- 数据改变了，视图会刷新
+
+            // 改变数据后，想马上取到最新结果去操作，一定放在 this.$nextTick()里
+            //如果数据变化后想获取真实dom中的内容，需要等待页面渲染完毕后再去获取，所有的dom操作，最好放在  this.$nextTick()里
+            this.$nextTick(()=>{
+                console.log(this.$refs.myul);
+                console.log(this.$refs.myul.children);
+                console.log(this.$refs.myul.children.length);
+            })
+             
+        }
+    })
+    </script>
+</body>
+</html>

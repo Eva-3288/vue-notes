@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">  </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        //在每个初始化的实例或者组件都有很多的方法，这些方法是vue提供的方法
+        /* 声明周期：从出生到死亡
+        beforeCreate --出生之前   created -- 出生后
+        beforeMount -- 挂载之前 mounted -挂载后
+        beforeUpdate -- 更新前   updated -- 更新后
+        beforeDestroy -- 死亡前   destroyed -- 死亡后 */
+        let vm = new Vue({  //根实例，初始化时会调用很多方法，这些方法叫做钩子函数，钩子函数只是个名字，可以理解为回调
+        el:'#app',  //挂载，也可以在实例外面使用   实例vm.$mount('#app') 这样挂载
+        beforeCreate(){   // 1. 此方法一般用不到
+            // 这一步只是初始化完了一些内部的事件和声明周期，data 和methods 还没有
+        },
+        created(){   //2. 初始化操作，获取ajax
+            //这一步之前完成了数据注入，和响应化数据，此时vue实例已经代理了数据
+            console.log(this.$data);    //可以通过 this.$data 获取数据
+        },
+        beforeMount(){ //编译前-没有实际意义
+            //3. 要保证有编译的元素，如果没有的化，就不会往下走
+        },
+        mounted(){
+            //真实dom渲染完了，可以操作dom了
+        },
+        beforeUpdate(){   //当依赖的数据更改后才能更新，不依赖的更新了，没有反应，一般用不到，用watch更好用
+            //更新之前
+        },
+        updated(){
+            //更新之后
+        },
+        // 虚拟dom是一个对象，会拿新对象和老对象进行比较
+        beforeDestroy(){   //要调用 vm.$destroy();  才会销毁
+            //销毁前，移除监听者 和时间监听等，此时再修改数据等待都不会再变化了，没有watch了
+        
+            // 可以在这里销毁前，清除定时器  或者 清除事件绑定
+        },
+        destroyed(){
+            //销毁后
+        },
+        template:'<di>{{a}}</div>',  //4. 如果有template 属性，就会用模板替换掉外部html ，只要有此属性，#app 中的内容就没有任何意义了
+        //模板需要有且只有一个根元素，不能是文本节点；编译后模板内容会替代 #app  元素
+        data:{
+            a:'red',
+        }
+    })
+    </script>
+</body>
+</html>
