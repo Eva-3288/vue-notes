@@ -9,18 +9,30 @@
 </head>
 <body>
     <div id="app">
-        <comp></comp>
+        <comp1></comp1>
+        <comp2></comp2>
        <!-- 33.使用组件 -->
     </div>
     <script src="node_modules/vue/dist/vue.js"></script>
     <script>
-    //   局部组件使用三部曲：1.创建组件   2.注册组件  3.使用组件
-    let comp = { template:'<div>你好</div>'};  //1.创建组件，组件就是一个对象，里面必须有template属性
-
+    //1. 局部组件使用三部曲：1.创建组件   2.注册组件  3.使用组件
+    //2. 组件是相互独立的，不能跨作用域，vm实例也是一个组件--所以vm上的数据，组件是取不到的
+        // 如果组件公用了数据，会导致同时更新(这样组件就没有  独立性 了)
+    // 3. 实例上的声明周期函数，组件也有自己的；
+    // 4. 子组件不能直接使用父组件（vm）的数据;--组件之间的数据交互
+    //5. 组件可以套组件，组件理论上可以无限嵌套；
+    let comp1 = { template:'<div>你好</div>'};  //1.创建组件，组件就是一个对象，里面必须有template属性
+    let comp2 = { 
+        template:'<div>hello</div>',
+        data(){    //为什么写个函数，返回一个对象就独立了？因为掉用一个函数，产生一个新作用域（新对象），调用两个函数返回的对象，（空间）永远都不会一样，不会出现共用数据的问题，所以需要是个函数；
+            return {};
+        }
+    };
     let vm = new Vue({  
         el:'#app',  
         components:{
-            comp,   //2.注册组件，comp:comp,  es6中名字一样可以简写为 comp
+            comp1,   //2.注册组件，comp:comp,  es6中名字一样可以简写为 comp
+            comp2,
         }
     })
     </script>
