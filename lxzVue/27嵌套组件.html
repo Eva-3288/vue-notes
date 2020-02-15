@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <parent></parent>
+       <!-- 33.使用组件 -->
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+    let grandson = { 
+        template:`<div>grandson{{m}}</div>`,
+        props:{  //对象形式可以进行验证
+            m:{
+                type:[String,Function,Number], //限制传的数据类型，会报错但不会阻止代码执行
+                // default:0,
+                required:true,  //不能和default共用
+                validator(val){
+                    return val > 300;
+                }
+            }
+        }
+    }; 
+    
+    let son = {
+        template:`<div>son{{a}}<grandson :m='400'></grandson></div>`,
+        components:{ grandson,},
+        props:['a']   //子组件中接收父组件传的数据
+    };
+    let parent = { 
+        template:`
+            <div>parent<son :a='111'></son></div>`,
+        components:{ son,}
+    }; 
+    let vm = new Vue({  
+        el:'#app',  
+        components:{
+            parent,   
+        }
+    })
+    </script>
+</body>
+</html>
