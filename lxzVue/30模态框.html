@@ -14,7 +14,7 @@
             top:0;
             left:0;
             background: #000;
-            opacity:0.35;
+            opacity:0.5;
         }
         .dialog{
             width:400px;
@@ -30,36 +30,44 @@
 </head>
 <body>
     <div id="app">
-        <comp1></comp1>
-        <comp2></comp2>
-       <!-- 33.使用组件 -->
-       <div class="mask">
-           <div class="dialog"></div>
-       </div>
+        <button @click='flag = !flag'>弹窗</button>
+        <model :turn = 'flag'  @myclose='fn'></model>
     </div>
+    <template id='model'>
+        <div class="mask" v-if='turn'>
+            <div class="dialog">
+                <button @click='close'>关闭</button>
+            </div>
+        </div>
+   </template>
     <script src="node_modules/vue/dist/vue.js"></script>
     <script>
-        //发布订阅：一对多的依赖关系，让多个订阅者对象同时监听一个主题的变化
-        // vm.$on绑定事件   vm.$once绑定一次  vm.$off解绑事件   vm.$emit 触发事件
-        
-        //给父亲绑定一些事件，儿子触发事件时将数据传递过去
-        // 单向数据流：父亲数据刷新，儿子数据就刷新
-
-        //方法时父亲的，属性时儿子的（自定义属性/事件名）
+       
     let model = { 
-        template:'<div>你好</div>'
-    };  //1.创建组件，组件就是一个对象，里面必须有template属性
-    let comp2 = { 
-        template:'<div>hello</div>',
-        data(){    //为什么写个函数，返回一个对象就独立了？因为掉用一个函数，产生一个新作用域（新对象），调用两个函数返回的对象，（空间）永远都不会一样，不会出现共用数据的问题，所以需要是个函数；
-            return {};
+        template:'#model',
+        data(){
+            return {}
+        },
+        props:['turn'],
+        methods:{
+            close(){
+                this.$emit('myclose')
+            }
         }
-    };
+    };  
+    
     let vm = new Vue({  
         el:'#app',  
         components:{
-            comp1,   //2.注册组件，comp:comp,  es6中名字一样可以简写为 comp
-            comp2,
+            model,   
+        },
+        data:{
+            flag:false,
+        },
+        methods:{
+            fn(){
+                this.flag = false;
+            }
         }
     })
     </script>

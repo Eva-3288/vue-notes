@@ -14,7 +14,12 @@
     </div>
     <script src="node_modules/vue/dist/vue.js"></script>
     <script>
+     // vm.$on绑定事件   vm.$once绑定一次  vm.$off解绑事件   vm.$emit 触发事件
+        
+     //给父亲绑定一些事件，儿子触发事件时将数据传递过去
+     // 单向数据流：父亲数据刷新，儿子数据就刷新
 
+     //属性值（方法）是父亲的，属性是儿子的（自定义属性/事件名）
     
     let son = {
         // 子传父1： 点击子组件里某元素，触发自己的事件add
