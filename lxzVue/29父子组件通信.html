@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <!-- 子传父3： 通过子组件自己的 自定义事件名，找到绑定的父组件的 方法 -->
+        <son @sonclick='parentFn' :parentnum='num'></son>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+
+    
+    let son = {
+        // 子传父1： 点击子组件里某元素，触发自己的事件add
+        template:`<div @click = 'add'>点击后加{{a}}变为：{{parentnum}}</div>`,   //使用父组件里的数据
+        props:['parentnum'],   //子组件中接收父组件传的数据
+        data(){
+            return {
+                a:10,
+            }
+        },
+        methods:{
+            add(){
+                // 子传父2： 在事件add中，触发自己的自定义事件名,并传参数过去
+                this.$emit('sonclick',this.a);
+            }
+        }
+    };
+    let vm = new Vue({  
+        el:'#app', 
+        data:{
+            num:9,
+        }, 
+        components:{
+            son,   
+        },
+        methods:{
+            // 子传父4： 在方法中操作子组件传来的数据
+            parentFn(val){
+                this.num += val;
+            }
+        }
+    })
+    </script>
+</body>
+</html>

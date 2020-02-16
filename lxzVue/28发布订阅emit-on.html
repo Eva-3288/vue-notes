@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    
+    <script>
+        //发布订阅：一对多的依赖关系，让多个订阅者对象同时监听一个主题的变化
+        // vm.$on绑定事件   vm.$once绑定一次  vm.$off解绑事件   vm.$emit 触发事件
+        
+        function Girl(){   //构造函数
+            this._events = {};    //这个变量，on 和 emit 方法都能调用，但是又是私有的，所以卸载构造函数里
+         }   
+        //让每个实例都有 on /emit 方法，就把方法写到构造函数的原型上
+        Girl.prototype.on = function(eventName,callback){   
+            // {shilian:[fn1,fn2,fn3]}   --组成这个形式-一对多的关系
+            if(this._events[eventName]){   //判断是不是第一次给这个事件订阅方法
+                this._events[eventName].push(callback);
+            }else{
+                this._events[eventName] = [callback];
+            }
+        }
+        Girl.prototype.emit = function(eventName,...args){
+            // Array.from(arguments).slice(1);
+            // [].slice.call(arguments,1);
+            //触发事件eventName，执行该事件订阅的方法
+            if(this._events[eventName]){   //判断是否订阅过方法
+                this._events[eventName].forEach(ele =>{
+                    ele(...args);
+                    // ele.apply(this,args);
+                })
+            }
+            
+        }
+        let girl  = new Girl();  //实例化一个girl
+        // 定义方法
+        let fn1 = (arg1,arg2)=>{console.log(`${arg1}哭`);}
+        let fn2 = (arg1,arg2)=>{console.log(`在${arg2}十六了，哭`);}
+        let fn3 = (arg1,arg2)=>{console.log('买');}
+        // 绑定/订阅 方法到实例上，等实例事件触发的时候调用订阅的方法
+        girl.on('shilian', fn1);    // {shilian:[fn1]}
+        girl.on('shilian', fn2);   // {shilian:[fn1,fn2]}
+        girl.on('shilian', fn3);  //把一个事件订阅的方法放在一起：{shilian:[fn1,fn2,fn3]}
+        //触发/发布  事件
+        girl.emit('shilian','参数1','参数2');  //触发失恋，这个事件订阅的方法都会被调用
+    </script>
+</body>
+</html>
