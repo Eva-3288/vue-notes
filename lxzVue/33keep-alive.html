@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <input type="radio" v-model='val' value='home'>home
+        <input type="radio" v-model='val' value='list'>list 
+        <keep-alive>
+            <component :is='val'></component>
+        </keep-alive>
+        
+        <!-- 这是vue自带的标签，不用声明可以直接用类似的还有template、slot 、transition、transiton-group -->
+        <!-- 组件切换的时候，会进行销毁旧的然后挂载新的，但是我们反复切换的时候，希望缓存组件，可以把组件放到keep-alive标签里 -->
+        <!-- <keep-alive></keep-alive> 一般用作缓存：为后面的路由做准备
+            以前页面的切换都是点击一下重新渲染一下，但是路由的功能是可以缓存，把组件缓存起来
+            如果缓存了就不会再走created 、mounted等钩子函数了
+        -->
+
+        <!-- 子组件和父组件同时拥有mounted方法，会先走谁的？
+          mounted-挂载完，父组件挂载前需要先确定子组件挂载完了
+          需要等待子组件挂载完成后再触发父组件的挂载
+
+        -->
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+    //keep-alive 保持连接 ，组件有个方法：销毁
+    
+    let home ={
+        template:'<div>home</div>'
+    }
+    let list ={
+        template:'<div>list</div>'
+    }
+    let vm = new Vue({  
+        el:'#app',  
+        data:{
+            val:'home'
+        },
+        components:{
+            home,   
+            list
+        },
+    })
+    </script>
+</body>
+</html>
