@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <comp>lxz</comp>  
+        <!--1. 如果没有 slot属性，组件标签中的内容 会被插到组件里的 <slot></slot>中，也就是<slot name='default'></slot>-->
+        <hr>
+        <comp>
+            <p slot='msg1'>你好！</p>
+            <span slot='msg2'>请登录!</span>
+        <!--2. 如果有 slot属性，标签中的内容 会被插到组件里的slot标签中对应的name属性的标签里 <slot name='msg2'></slot>-->
+
+        </comp>
+    </div>
+    
+    <template id='comp'>
+        <div>
+            <slot></slot> <!--1. <slot></slot>  等于 <slot name='default'></slot> -->
+            <slot name='msg1'></slot> 
+            <!-- 2.显示传入的 -->
+            <slot name='msg3'>传就显示传的内容，没有传入内容，就显示这里的默认内容</slot>
+            <!-- 3.传就显示传的，没传就显示默认的 -->
+            <slot name='msg2'></slot>
+            <slot name='msg4'></slot>
+            <!-- 4.传就显示，没传就不显示 -->
+        </div>    
+    </template>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+       
+    let comp = { 
+        template:'#comp',
+    };  
+    
+    let vm = new Vue({  
+        el:'#app',  
+        components:{
+            comp,   
+        },
+    })
+    </script>
+</body>
+</html>
