@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <comp ref='load'></comp>  
+        
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+       
+    let comp = { 
+        template:`<div v-show='flag'>加载中...</div>`,
+        data(){
+            return {
+                flag:true,
+            }
+        },
+        methods:{
+            close(){
+                this.flag = false;
+            }
+        }
+    };  
+    
+    let vm = new Vue({  
+        el:'#app',  
+        mounted(){  //mounted里dom元素加载完成了,关闭掉loading
+            //ref属性加在dom上，this.$refs获取的是dom，如果ref放在组件上，获取的是组件的实例，并不是组件的dom元素
+            // this.$refs.load.close();   
+            this.$refs.load.$el.style.background = 'red';
+        },
+        components:{
+            comp,   
+        },
+    })
+    </script>
+</body>
+</html>
