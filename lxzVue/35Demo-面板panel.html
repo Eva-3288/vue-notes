@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+    <div id="app">   
+        <panel color='success'>
+            <p slot='title'>标题标题标题111</p>
+            <ul slot='body'>
+                <li>内容1</li>
+                <li>内容2</li>
+                <li>内容3</li>
+                <li>内容4</li>
+                <li>内容5</li>
+            </ul>
+        </panel>
+        <!-- <panel color='default'></panel>  -->
+        <!-- 传入不同的属性color颜色，定制样式 -->
+    </div>
+    <template id='panel'>
+        <div class="panel" :class='mycolor'>
+            <div class="panel-heading">
+                <slot name='title'></slot>
+            </div>
+            <div class="panel-body">
+                <slot name='body'></slot>
+            </div>
+            <div class="panel footer">
+                <slot>默认内容</slot>
+            </div>
+        </div>
+    </template>
+    <script src="node_modules/axios/dist/axios.js"></script>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+    let panel = {
+       template:'#panel' ,
+       computed:{
+            mycolor(){  //注意：类名panel-warning 后面的字段是父组件传入的，可以用计算属性进行处理，变成子组件的数据
+                return `panel-${this.color}`
+            }
+            // 父组件传的数据color不能在子组件里更改，可以在data里赋给一个新数据，也可以用计算属性算出一个新数据，然后修改
+       },
+       props:{
+           color:{
+               type:[String],   //注意：['String'] 这样加''会报错
+               default:'primary'
+           }
+       }
+    }
+    let vm = new Vue({ 
+        el:'#app',
+        data:{   
+    
+        }, 
+        components:{
+            panel
+        }
+    })
+    </script>
+</body>
+</html>
