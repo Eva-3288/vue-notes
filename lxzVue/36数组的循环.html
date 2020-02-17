@@ -10,17 +10,13 @@
 </head>
 <body>
     <div id="app">   
-        <panel color='success' @show-title='parentFn'>
-            <p slot='title'>标题标题标题111</p>
-            <ul slot='body'>
-                <li>内容1</li>
-                <li>内容2</li>
-                <li>内容3</li>
-                <li>内容4</li>
-                <li>内容5</li>
-            </ul>
-            <div>
-                <p>结尾结尾</p>
+        <panel :color='item.type' @show-title='parentFn' v-for='(item,index) in articles' :key='index'>
+            <p slot='title' v-html='item.title'></p>
+            <div slot='body' v-text='item.content'>
+
+            </div>
+            <div v-if='item.footer'>
+                {{item.footer}}
             </div>
         </panel>
         <!-- <panel color='default'></panel>  -->
@@ -69,7 +65,12 @@
     let vm = new Vue({ 
         el:'#app',
         data:{   
-            num:'333'
+            num:'333',
+            articles:[
+                {type:'warning',title:'<p>标题666</p>',content:'内容66622222',footer:'结尾666333'},
+                {type:'success',title:'<p>标题777</p>',content:'内容77722222 '},
+                {type:'danger',title:'<p>标题888</p>',content:'内容88822222',footer:'结尾888333'},
+            ]
         }, 
         components:{
             panel
