@@ -18,6 +18,12 @@
         el:'#app',  
         mounted(){
             console.log(this.$refs.son.$el.innerHTML);   //<ul><li>1</li><li>2</li><li>3</li></ul>       
+        //2.然后走父组件的mounted，此时子组件的dom渲染还没渲染完，所以获取到的是之前没改数据前的
+            this.$nextTick( ()=>{
+                console.log(this.$refs.son.$el.innerHTML) ;  //<ul><li>1</li><li>2</li><li>3</li></ul>       
+                //3.所以强烈建议把dom操作放在this.$nextTick(callback)的回调里，等dom渲染完再执行回调函数
+            }
+        );
         },
         components:{
             son:{
@@ -27,7 +33,7 @@
                         arr:[1,2,3]
                     }
                 },
-                mounted(){  //1.此时dom已经渲染完了，页面数据是123，先执行子组件的mounted
+                mounted(){  //1.此时dom已经渲染完了，页面数据是123，先执行子组件的mounted,在mounted里数据改了，然后重新渲染dom，但dom渲染是异步的，
                     this.arr = [4,5,6];
                 }
             }
