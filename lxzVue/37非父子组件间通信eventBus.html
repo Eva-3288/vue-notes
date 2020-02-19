@@ -15,18 +15,37 @@
     <script src="node_modules/vue/dist/vue.js"></script>
     <script>
         // 组件都有自己独立的作用域，非父子关系的组件的通信，如果是简单业务就用eventbus(),复杂的就用vueX
+    let eventBus = new Vue;   //3. 定义一个事件车，不需要传参
     let brother1 = {
-       template:`<div>{{color}} <button>让2变成红色</button><div>` ,
-       
+       template:`<div>{{color}} <button @cha>让2变成红色</button></div>` ,
+       created(){
+   /*   发布订阅：点击2 要改变1的颜色，
+        1是被改变的--在1上订阅，所以在1careated里一加载完就放上事件监听 
+        点击2--在2上触发，所以在2里写点击 时 触发 1上监听的事件 
+        
+        最初的想法是这样的，但是由于发布和订阅不在同一个实例上，无法互相找到和触发，
+        所以引入一个实例（创建一个第三方实例）作为中间体，发布和订阅都写到这上面*/
+
+        // 1. 先在自己组件里一加载到时候，监听一个事件，这个事件被触发时执行后面的函数
+        eventBus.$on('changeGreen',(val)=>{     //这里必须是箭头函数，回调用function里面的this都是window,用箭头函数this都指向当前实例
+            this.color = val;   //4.把监听事件放到eventBus
+        })
+       },
        data(){
            return {color:'1原始红色',old:'红色'}
        }
      
     }
     let brother2 = {
-       template:`<div>{{color}} <button>让1变成绿色</button><div>` ,
+       template:`<div>{{color}} <button @click='change'>让1变成绿色</button></div>` ,
        data(){
-           return { color:'1原始绿色',old:'绿色'}
+           return { color:'2原始绿色',old:'绿色'}
+       },
+       methods:{
+            // 2.点击事件时调用change方法，然后在方法里触发订阅的changeGreen
+            change(){
+                eventBus.$emit('changeGreen',this.old);  //5.触发的时候触发eventBus上的事件
+            }
        }
      
     }

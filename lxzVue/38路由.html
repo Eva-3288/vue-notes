@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+</head>
+<body>
+    <div id="app">   
+        <router-view></router-view>
+        <!-- 5.当路径匹配后，会把路由对应组件的模板放到这里 ，这是vue-router提供的一个组件-->
+        <!-- 这是一个全局组件，可以不用定义注册，就直接使用 -->
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-router/dist/vue-router.js"></script>
+    <!-- vue-router基于vue，要先引vue -->
+    <script>
+        /* 
+        路由：访问不同的路径，返回不同的结果
+        多页面 / 单页面（spa-single page application 单页应用)
+        单页应用切换的是 是组件，一个html页面 切换里面的内容
+        npm install vue-router --save
+
+        前后端分离--后端只负责提供接口
+        前端单页面应用跳转2中方式： hash模式(#)   和  h5的 history属性： history.pushState等
+        vue-router也是基于上面2类的，但是用法一致，写明后会自己判断
+
+        history 的特点：
+        history.pushState('','','/acdv');   //可以‘ 在当前路径下/acdv ’    这样加上路径且页面不刷新
+        但是不能回车，回车后会真实的访问那个路径,开发时会导致404问题
+
+        开发时使用hash， hash模式在百度网页后面加#111，回车还是在百度页面，不会导致404问题，
+        上线的时候再改成h5的，因为#后面的值是hash，hash 不会被搜索引擎搜索到，不支持seo
+
+        开发用hash,上线用history
+        */
+    let home = {
+        template:'<div>首页</div>'
+    };
+    let list = {
+        template:'<div>列表页</div>'
+    };
+
+    //2.写映射表：路由的映射表，配置路径和组件的关系
+    let routes = [
+        {path:'/home',component:home},     // path里面写路径： /代表路径，配置的关系是页面级组件， 一个页面是一个租金按
+        {path:'/list',component:list},   // 路径必须加/
+    ];
+    // 1.new一个路由实例
+    let router = new VueRouter({      //引入vue-router后，自带VueRouter，VueRouter 是放在window上的一个工厂类，new 出一个实例，参数传一个对象
+        // 我们写一个映射关系，一个路径对应一个组件，当我们访问路径的时候，就显示那个组件
+        routes,    // 3.引入映射表到roetes熟悉，routes:routes 的简写，routes是路由的一个属性
+    });
+    let vm = new Vue({ 
+        el:'#app',
+        data:{   
+            
+        }, 
+        router, // 4. 注册router到vue实例上,  router:router的简写
+        //把router注册到实例上，会接收这个实例，知道当前实例时单页面应用，会把路由跑起来,
+        // 运行后，http://127.0.0.1:5500/vue-notes/lxzVue/38%E8%B7%AF%E7%94%B1.html#/  发现路径后面多了#/， /是根路径，
+        // 此时在根路径后加home 页面没有内容，要把vue-router提供的组件<router-view>放到要展示的地方
+        components:{
+   
+        },
+        methods:{
+           
+        }
+    })
+    </script>
+</body>
+</html>
