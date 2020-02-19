@@ -19,56 +19,51 @@
         <!-- 
            编程式导航，在js中跳转页面
          -->
-        <router-link to='/home' tag='button'>首页</router-link>
-        <router-link :to = "{path:'/list'}"  tag='button'>列表</router-link>
+        <router-link to = '/home'>首页</router-link>
+        <router-link to ='/list'>列表</router-link>
 
         <router-view></router-view>
         
     </div>
+
+    <template id='list'>
+        <div>
+            <router-link to='/list/detail1'>详情1111</router-link>
+            <router-link to='/list/detail2'>详情2222</router-link>
+
+            <router-view></router-view>
+        </div>
+    </template>
     <script src="node_modules/vue/dist/vue.js"></script>
     <script src="node_modules/vue-router/dist/vue-router.js"></script>
-    <!-- vue-router基于vue，要先引vue -->
     <script>
+        //嵌套路由，路由分一级 和  二级...
+    let home = {template:`<div>首页</div>`};
+    let list = {template:'#list'};
+    let detail1 = {template:`<div>详情11</div>`};   
+    let detail2 = {template:`<div>详情22</div>`};
 
-    let home = {
-        template:`<div>首页 <button @click='toList'>去列表页</button></div>`,
-        methods:{
-            toList(){
-                this.$router.push('/list');    //push是方法，强制跳转路径，放在$router上
-                this.$router.replace('/list');  //路由替换，将当前的历史替换掉，用go的时候会返回不到
-                // 历史管理里，push是一个个往后追加，这个是替换，等回退的时候，被替换的就找不到了
-            }
-        }
-    };
-    // 不通过router-link去跳转了，使用js的方式，加事件调转
-    let list = {
-        template:`<div>列表页 <button @click='back'>返回</button></div>`,
-        methods:{
-            back(){
-                this.$router.go(-1);  //返回某一级，
-            }
-        }
-    };
-
-    //2.写映射表：路由的映射表，配置路径和组件的关系
     let routes = [
-        {path:'/home',component:home},     // path里面写路径： /代表路径，配置的关系是页面级组件， 一个页面是一个租金按
-        {path:'/list',component:list},   // 路径必须加/
+        {
+            path:'/home',
+            component:home
+        },    
+        {
+            path:'/list',
+            component:list,
+            children:[   //二级路由，children中的路径，永远不带/，/表示根路径，带/表示是一级路由
+                {path:'detail1',component:detail1},  //他对应的router-link 和 router-view放在这路由所在页面的模板里
+                {path:'detail2',component:detail2},
+            ]
+        },   
     ];
-    // 1.初始化/new一个路由实例
+   
     let router = new VueRouter({   
-        // 在这里进行路由配置：-----------------
-
-        // mode:'history',   //模式，默认是hash,现在改成历史，浏览器自带的历史管理,现在是h5模式
-        routes,    // 3.引入映射表到roetes熟悉，routes:routes 的简写，routes是路由的一个属性
-        linkActiveClass:'active',  //链接激活时的样式，默认是linkActiveClass:'router-link-active'，我们可以修改
+        routes,   
     });
     let vm = new Vue({ 
         el:'#app',
-       
-        router, // router注册到实例上以后，会在内部生成一个属性$router 挂载vue实例上,取的时候 this.$touter
-        // 还有一个属性是$route ,(有r的放的都是方法，没r的放都是属性)
-      
+        router,  
     })
     </script>
 </body>
