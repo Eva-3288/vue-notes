@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <style>
+        /* 在这里写明路由激活时的样式 */
+        /* .router-link-active   默认样式的类名起初是这个，我们在路由里进行了配置修改 */
+        .active{
+            color:red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"> 
+        <!-- 
+            <a href="#/home">首页</a> 
+            <a href="#/list">列表</a> 
+            这种方式可以实习页面跳转，但仅限于hash，等上线改成history 模式时就不行了
+            开发时用history模式，不能在链接里回车，会报404
+            这两种编译后：hash  在页面里是 <a href="#/home">首页</a>
+                         history 在页面里是 <a href="/home">首页</a>
+
+            vue提供了另一个组件router-link -路由链接用于页面跳转，配合必填属性to ='/路径'
+
+            组件属性：
+            to='/home' 路由跳转到哪个路径，里一定要写/，不然有二级路由的话会有bug
+            tag='button'  默认编译后是a标签，这样写编译后是button标签
+         -->
+         <!-- 这是声明式导航，我们不关心他怎么实现的 -->
+        <router-link to='/home' tag='button'>首页</router-link>
+        <router-link :to = "{path:'/list'}"  tag='button'>列表</router-link>
+        <!-- to的属性值还可以写对象，对象的话to前面要加：,不然会认为式字符串
+        这样动态的写可以拼变量  :to="{path:'/home'+a}"  或者path的值经计算属性后直接放进来
+        -->
+
+        <router-view></router-view>
+        <!-- 5.当路径匹配后，会把路由对应组件的模板放到这里 ，这是vue-router提供的一个组件-->
+        <!-- 这是一个全局组件，可以不用定义注册，就直接使用 -->
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-router/dist/vue-router.js"></script>
+    <!-- vue-router基于vue，要先引vue -->
+    <script>
+
+    let home = {
+        template:'<div>首页</div>'
+    };
+    let list = {
+        template:'<div>列表页</div>'
+    };
+
+    //2.写映射表：路由的映射表，配置路径和组件的关系
+    let routes = [
+        {path:'/home',component:home},     // path里面写路径： /代表路径，配置的关系是页面级组件， 一个页面是一个租金按
+        {path:'/list',component:list},   // 路径必须加/
+    ];
+    // 1.初始化/new一个路由实例
+    let router = new VueRouter({   
+        // 在这里进行路由配置：-----------------
+
+        // mode:'history',   //模式，默认是hash,现在改成历史，浏览器自带的历史管理,现在是h5模式
+        routes,    // 3.引入映射表到roetes熟悉，routes:routes 的简写，routes是路由的一个属性
+        linkActiveClass:'active',  //链接激活时的样式，默认是linkActiveClass:'router-link-active'，我们可以修改
+    });
+    let vm = new Vue({ 
+        el:'#app',
+        data:{   
+            
+        }, 
+        router, // 4. 注册router到vue实例上,  router:router的简写
+        components:{
+   
+        },
+        methods:{
+           
+        }
+    })
+    </script>
+</body>
+</html>
