@@ -30,6 +30,7 @@
         <div>
             <router-link to='/list/detail1'>详情1111</router-link>
             <router-link to='/list/detail2'>详情2222</router-link>
+            <!--二级路由的时候要写一级+二级， '/list/detail1' -->
 
             <router-view></router-view>
         </div>
@@ -51,7 +52,7 @@
         {
             path:'/list',
             component:list,
-            children:[   //二级路由，children中的路径，永远不带/，/表示根路径，带/表示是一级路由
+            children:[   //1. 二级路由，children中的路径，永远不带/，/表示根路径，带/表示是一级路由
                 {path:'detail1',component:detail1},  //他对应的router-link 和 router-view放在这路由所在页面的模板里
                 {path:'detail2',component:detail2},
             ]

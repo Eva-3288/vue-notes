@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <style>
+        .router-link-active{
+            color:red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"> 
+        <router-link to = '/article/1/a'>文章1</router-link>
+        <router-link to ='/article/2/b'>文章2</router-link>
+        <router-link to ='/article/3/c'>文章3</router-link>
+
+        <router-view></router-view>
+        
+    </div>
+
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+    //带参数的路由（参数路由params router）：
+    /*  
+        http://localhost:3000/article?id=1     --这是查询参数
+        http://localhost:3000/article/1    --这是路径参数,这个值是随机的，不能写死
+    */ 
+
+
+    let article = {template:`<div>第{{this.$route.params.c}} 篇文章 的{{this.$route.params.m}}</div>`};
+
+    let routes = [
+         // 真实访问的路径是： /article/1/a  
+         // 配置的模拟路径是： /article/:c/:m
+         // 内部会拿正则，把他们一个个匹配到，然后做成一个对象 {c:1,m:'a'c:1,m:'a'} ，然后把这个对象放在 this.$route.params上
+         // params的值是一个对象，那他肯定是一个属性，属性都放在$route上
+        {
+            path:'/article/:c/:m',   // 用：表示是变量, c这个名字可以修改    :c 表示可以匹配任何一个随机数
+            component:article,
+        },   
+    ];
+   
+    let router = new VueRouter({   
+        routes,   
+    });
+    let vm = new Vue({ 
+        el:'#app',
+        router,  
+    })
+    </script>
+</body>
+</html>
