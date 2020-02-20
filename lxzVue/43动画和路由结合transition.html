@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="./node_modules/animate.css/animate.css">
+    <style>
+        .router-link-active{
+            color:red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"> 
+       <router-link to='/home'>首页</router-link>
+       <router-link to='/list'>列表页</router-link>
+        
+       <!-- 这个动画默认是并行的：出去 和 进来一起执行，这样就有一段时间两个组件都会出现
+            我们可以用 mode='out-in'  动画的模式，先出去后进来，但是这样dom 会抖一下，因为他们是同一层视图里的
+            可以给router-view 加position:absolute,让他们在不同的层里
+        -->
+       <transition enter-active-class='animated fadeIn' leave-active-class='animated fadeOut'>
+           <keep-alive>
+                <router-view style="position:absolute;width:100%;"></router-view>
+                <!-- 要缓存谁，就把谁包起来 -->
+           </keep-alive>
+       </transition>
+    </div>
+
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+        let home = {
+            template:'<div style="background:green;">首页</div>',
+            /* beforeDestroy(){
+                alert(111)
+            } 
+            //组件销毁之前调用这个方法，如果组件会销毁的话，就执行这个函数，测试后知道，这里每次路由切换组件，组件会销毁
+            
+            我们希望组件不销毁，进行缓存，用keep-alive
+            */
+        };
+        let list = {
+            template:'<div style="background:red;">列表页</div>',
+        };
+        let router = new VueRouter({
+            routes:[
+                {path:'/home',component:home},
+                {path:'/list',component:list},
+            ]
+        })
+        let vm = new Vue({
+            el:'#app',
+            router,
+        })
+    
+    </script>
+</body>
+</html>
