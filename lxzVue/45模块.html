@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+       /* 
+            模块：
+            node的模块分为：自定义、第三方和内置
+            模块都遵循一种规范：
+            node模块的规范是commonjs，这个规范定义了：如何引用、如何导出、如何定义
+            模块的概念只针对js文件，css\html不行，所以模块一般特指的就是js文件
+
+            除了commonjs规范外，前端也有一些规范：cmd(seajs-define)  /  amd(require.js引入一些模块)，这些都是一些规范
+
+            为什么出现cmd/amd这些规范，因为以前前端不支持模块化，但是现在es6已经兼容了模块化esmodule--es的模块
+            我们可以基于es6来使用一些模块了
+
+            esmodule 和 commonjs的区别：
+            commonjs 是node的规范，只能在编辑器里右键 run
+                seajs 和 require.js是人家写好的规定的写法，
+                es6的模块化可以在浏览器中用，
+       */
+    
+       /* 
+            let a = require('../')  这种写法是node的写法，不能再前端使用，而且前端也没有require 这个关键字，会报错require is not defined
+       
+            seajs 和 requirejs 是一个帮我们实现模块化的库，还需要引用这个库，而es6的模块化 可以直接使用
+
+            umd -- 用来兼容处理，用了它之后可以既支持cmd 又支持amd 又支持commonjs规范
+       */
+       
+      /*在commonjs中/也就是在nodejs中，
+                定义模块：一个js文件就是一个模块；
+                到处模块：exports   或者  module.exports
+                引入模块：require
+      */
+
+      /* 关于esmodule:
+            1. 定义模块：一个js就是一个模块
+            2.导出模块： export   (注意es6 没有s)
+            3.引入模块：import
+      */
+
+      /* 
+      前端模块化基于html的，在html里只需要引用一个模块，然后在这个模块里引用别的模块，自动加载别的模块
+
+      例如，我们新建一个main.js 用于整合js，在这里面引其他的文件，通过main.js 自动把其他js加载进来
+
+      参看文件夹module1
+
+      */
+    </script>
+</body>
+</html>
