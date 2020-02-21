@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!--
+    chrome要62以上，如果不支持，可以借用第三方的插件（库）去解析,放在引入模块的文件的上面
+    引入后，又会帮我们解析一次，如果浏览器可以解析，就可以执行两次，浏览器解析一次，这个包解析一次
+    
+    <script src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
+    <script src="https://google.github.io/traceur-compiler/bin/BrowserSystem.js"></script>
+    <script src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script> 
+    -->
+    <script src='main.js' type='module'></script>
+    <!-- 引模块，要加type='module' 说明引的是个模块，按模块的规则来解析 
+        如果没有反应的话：因为浏览器把这个js当成模块加载了，这种模块语法是es6支持的，如果浏览器的版本太低，就解析不出js里的内容，
+    -->
+
+    
+
+</body>
+</html>
