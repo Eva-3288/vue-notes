@@ -1,3 +1,7 @@
+// 引css
+import './a.css';
+import './a.less';
+
 //commonjs 规范写法-引入：
 let str = require('./a.js');
 console.log(str);

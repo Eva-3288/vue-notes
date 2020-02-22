@@ -1,20 +1,37 @@
 let path = require('path');
-//peth是node的模块，用来处理路径的；最常用的方法是resolve()
+// path.resolve('./dist');  //以当前路径解析出一个绝对路径
+let HtmlWebpackPlugin = require('html-webpack-plugin');
 
-path.resolve('./dist');  //以当前路径解析出一个绝对路径
-console.log(path.resolve('./dist'));
-
-//resolve是解析，给他一个相对路径，会返回一个绝对路径；
-
-//webpack 必须采用commonjs的写法，不能用es6或其他的；
-// 规定的是要导出一个模块module.exports = {}
 module.exports = {
-    entry:'./src.main.js',    
-    //打包的入口文件，webpack会自动查找相关的依赖进行打包
-    //在main.js里引了一些其他的js文件
+    entry:'./src/main.js',    
     output:{
-        filename:'bundle.js',   //打包后的名字
-        path:path.resolve('./dist'), //必须是一个绝对路径,打包文件放的位置
-        // c://xx/xx/index.js  这是绝对路径；  ./a/index.js  这是相对路径
-    }
+        filename:'bundle.js',   
+        path:path.resolve('./dist'), 
+    },
+    // 模块的解析规则
+    module:{
+        rules:[
+           {             // js: 匹配除node_module以外的所有.js后缀的文件，用babel-loader进行转译，转成es5;
+            test:/\.js$/,   //用正则匹配,/\.js$/以.js结尾的，exclude排除掉xx
+            use:'babel-loader',
+            exclude:/node_modules/,    //匹配所有.js,用babel-loader转译，排除掉node_modules
+        },{
+            test:/\.css$/,
+            use:['style-loader','css-loader'],    // 这里数组里要 从右往左写，先在右边写css-loader,然后写左边style-loader
+        },{
+            test:/\.less$/,
+            use:['style-loader','css-loader','less-loader'],    // 这里数组里要 从右往左写，先在右边写css-loader,然后写左边style-loader
+        },{
+            test:/\.(jpg|png|gif|svg)$/,
+            use:['url-loader?limit=8192'],    // 图片会给转成base64,我们可以限制8k(8*1024=8192字节)一下的转base64，其他情况下输出图片
+        }
+        ]
+    },
+    plugins:[
+        new HtmlWebpackPlugin({   //以自己的html为模板，将打包后的结果 自动引入到html中，产出到dist目录下  
+            template:'./src/index.html',   //使用的模板：自己定义的模板
+            filename:'login.html'    //产出的文件的名字：可以修改输出到dist下的html的文件名
+        }),
+    ]
+    
 }
