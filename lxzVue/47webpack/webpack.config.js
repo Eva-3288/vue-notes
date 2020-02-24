@@ -24,6 +24,9 @@ module.exports = {
         },{
             test:/\.(jpg|png|gif|svg)$/,
             use:['url-loader?limit=8192'],    // 图片会给转成base64,我们可以限制8k(8*1024=8192字节)一下的转base64，其他情况下输出图片
+        },{
+            test:/\.vue$/,
+            use:['vue-loader'],   //vue会自动的调用vue-template-compiler,就不用配vue-template-compiler了
         }
         ]
     },
