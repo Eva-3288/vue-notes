@@ -33,7 +33,7 @@ export default {
     left:0;
     bottom:0;
     width:100%;
-    height:90px;
+    height:80px;
     display:flex;
     /* router-link渲染后就是a标签 */
     a{

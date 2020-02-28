@@ -36,3 +36,9 @@ justify-content:center;    // 垂直居中
 align-item:center;   //横向居中
 flex:1;   //每份占1
 ```
+6. 使用swiper插件
+https://github.com/surmon-china/vue-awesome-swiper
+
+```
+npm install vue-awesome-swiper --save
+```
