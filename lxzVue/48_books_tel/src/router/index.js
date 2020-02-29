@@ -14,7 +14,8 @@ export default new Router({
     {path:'/lists',component:Lists},
     {path:'/add',component:Add},
     {path:'/collect',component:Collect},
-    {path:'/detail',component:Detail},
+    {path:'/detail/:bookid',component:Detail,name:'detail'},    //路径参数，:bookid必须有，可以随机；
+    // 当访问的路径是 /detail/1 会产生一个对象{bookid:1} 放在$route.params上
     {path:'*',redirect:'/home'}   //写在最后，如果是没找到的 也重定向到home路径，
   ]
 })

@@ -3,15 +3,21 @@
         <mHeader>列表页</mHeader>
         <div class="content">
             <ul>
-                <li v-for="(item,index) in lists" :key="index">
+                <!-- <li v-for="(item,index) in lists" :key="index"> -->
+                <!-- 页面跳转：路由跳转，用router-link -->
+                <!-- to的属性值是对象，前面要加：，-->
+                <!-- router-link默认是a标签，我们可以用tag='li'改成li标签 -->
+                <router-link :to="{name:'detail',params:{bookid:item.id}}" tag="li" v-for="(item,index) in lists" :key="index">
                     <img :src="item.img" alt="">
                     <div>
                         <p class="name">{{item.name}}</p>
                         <p class="info">{{item.info}}</p>
                         <p class="price">￥{{item.price}}</p>
-                        <button class="delBtn" @click = 'del(item.id)'>删 除</button>
+                        <button class="delBtn" @click.stop = 'del(item.id)'>删 除</button>
+                        <!-- 点击删除的时候，会冒泡触发父级的跳转详情的方法，所以用.stop阻止冒泡 -->
                     </div>
-                </li>
+                </router-link>
+                <!-- </li> -->
             </ul>
         </div>
     </div>
