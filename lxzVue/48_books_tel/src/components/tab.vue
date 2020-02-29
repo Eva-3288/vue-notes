@@ -35,6 +35,8 @@ export default {
     width:100%;
     height:80px;
     display:flex;
+    background: #fff;
+    border-top:1px solid #ccc;
     /* router-link渲染后就是a标签 */
     a{
         color:#666;

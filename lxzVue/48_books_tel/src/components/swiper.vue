@@ -36,8 +36,10 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 <style lang="less" scoped>
 .swiper-slide{
     width:100%!important;
+    height:200px;
     img{
         width:100%;
+        height:100%;
     }
 }
 </style>

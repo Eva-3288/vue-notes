@@ -30,5 +30,7 @@ input,button{
   position:fixed;
   top:40px;
   bottom:80px;
+  overflow: auto;
+
 }
 </style>

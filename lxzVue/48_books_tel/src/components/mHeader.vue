@@ -1,7 +1,7 @@
 <template>
   <div id="header">
       <i class="iconfont icon-fanhui1" v-if='back' @click='goBack'></i>
-      {{title}}
+      <slot></slot>
   </div>
 </template>
 <script>
@@ -18,17 +18,17 @@ export default {
       console.log(this.back);
       
   },
-  props:['title','back'],
-//   props:{
-//       back:{
-//           type:Boolean,
-//           default:false,
-//       },
-//       title:{
-//           type:String,
-//           default:'333'
-//       }
-//   },
+//   props:['back'],
+  props:{
+      back:{
+          type:Boolean,
+          default:false,
+      },
+    //   title:{
+    //       type:String,
+    //       default:'333'
+    //   }
+  },
     methods:{
         goBack(){
             this.$router.go(-1);

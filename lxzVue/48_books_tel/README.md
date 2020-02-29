@@ -39,6 +39,27 @@ flex:1;   //每份占1
 6. 使用swiper插件
 https://github.com/surmon-china/vue-awesome-swiper
 
-```
+```bash
 npm install vue-awesome-swiper --save
 ```
+7. axios拦截器
+```javascript
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:3000'    //设置默认的基本路径,增加默认的请求路径
+axios.interceptors.response.use((res)=>{    //在这里统一拦截结果，把结果处理成res.data
+    return res.data
+})
+
+//获取轮播图数据
+export let getSliders = ()=>{
+    return axios.get('./sliders');   //返回的是一个promise对象，可以then
+};
+//获取热门图书
+export let getHot = ()=>{
+    return axios.get('./hot');
+}
+```
+8. lists列表页中都是对书的操作：添加、删除、修改，用RESTful风格比较合适（一种架构风格，写接口的风格-根据对动词post\delete\put等实现增删改成）
+
+9.浏览器测试接口只能测get接口
