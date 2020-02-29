@@ -54,8 +54,14 @@ http.createServer((req,res)=>{       //创建服务,两个参数，请求和响�
         switch(req.method){    //判断请求的方法
             case 'GET':
                 if(id){  //查询一个
-
-
+                    read(function(books){
+                        let book = books.find(item=> {
+                            return item.id === id;
+                        })
+                        if(!book) book ={};
+                        res.setHeader('Content-type','application/json;charset=utf-8');
+                        res.end(JSON.stringify(book));
+                    })
                 }else{
                     //获取所有图书
                     read(function(books){

@@ -21,3 +21,7 @@ export let bookLists = ()=>{
 export let removeBook = (id)=>{
     return axios.delete(`/book?id=${id}`);    //delete通过路径传参   url?id=1
 }
+//查找某一个的详情
+export let findBook =(id)=>{
+    return axios.get(`/book?id=${id}`);
+}
