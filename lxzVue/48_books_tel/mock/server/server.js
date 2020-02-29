@@ -2,21 +2,13 @@
 let http = require('http');   
 let url = require('url');
 let path = require('path');
-console.log(process.cwd());
-
-
-
-console.log();
 
 let fs = require('fs');   //文件读写 
 function read(cb){   //fs.read是异步的，cb是回调
     // fs.readFile(path.join(__dirname,"./book.json"),'utf8',function(err,data){
     fs.readFile(path.resolve(__dirname,"./book.json"),'utf8',function(err,data){    //fs.read是异步的， 第三个参数是读取完执行的回调，err 和data 是失败和成功返回的信息
         // 注意：第一个参数要写文件的绝对路径
-        console.log(err);
-        console.log(data);
-        
-        
+
         if(err || data.length == 0){
             cb([]);
         }else{
@@ -25,7 +17,9 @@ function read(cb){   //fs.read是异步的，cb是回调
 
     })
 }
-
+function write(data,cb){   //写入内容
+    fs.writeFile(path.join(__dirname,'./book.json'),JSON.stringify(data),cb)
+}
 //获取轮播图接口   '/sliders'
 let sliders = require('./sliders-data')
 http.createServer((req,res)=>{       //创建服务,两个参数，请求和响应
@@ -75,6 +69,19 @@ http.createServer((req,res)=>{       //创建服务,两个参数，请求和响�
             case 'PUT': 
                 break;
             case 'DELETE':
+                read(function(books){
+                    books = books.filter((item,index)=>{   //过滤去掉被删除的那项，   操作完后放在books里时放在内存中了，
+                        console.log(item.id,id)
+                        return item.id !== id;
+                    })
+                    console.log(books);
+                    
+                    write(books,function(){
+                        // 写入后的回调函数
+                        console.log('成功写入');
+                        res.end(JSON.stringify([]));   //删除返回空对象
+                    })
+                })
                 break;
         }
         return

@@ -37,7 +37,10 @@ import {bookLists,removeBook} from '../api';
                 this.lists = await bookLists();
             },
              async del(id){
-                await removeBook(id);   //删除数据返回的空对象，所以不用接收返回值
+                await removeBook(id);   //删除数据返回的空对象，所以不用接收返回值, 调用这个接口删除了后台数据了
+                //还要删除前台显示的数据
+                this.lists = this.lists.filter(item=>item.id !== id);
+                // this.initLists();    //或者重新获取数据也可以
              }
 
         }
