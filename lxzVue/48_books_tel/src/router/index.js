@@ -10,7 +10,7 @@ import Detail from '../pages/Detail.vue'
 export default new Router({
   routes: [
     {path:'/',redirect:'/home'},   //路径是/ 重定向到'/home'  这个路径；    {path:'/home',component:Home}这样写只是调用home组件，但路径 和下面的tab都没有变化
-    {path:'/home',component:Home},
+    {path:'/home',component:Home,meta:{keepAlive:true}},   //取的时候在this.$route.meta.keepAlive
     {path:'/lists',component:Lists},
     {path:'/add',component:Add},
     {path:'/collect',component:Collect},

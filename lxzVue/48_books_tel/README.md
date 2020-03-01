@@ -63,3 +63,46 @@ export let getHot = ()=>{
 8. lists列表页中都是对书的操作：添加、删除、修改，用RESTful风格比较合适（一种架构风格，写接口的风格-根据对动词post\delete\put等实现增删改成）
 
 9.浏览器测试接口只能测get接口
+
+10.axios 是基于promise开发的，axios也有all方法
+
+```javascript
+ let [sliders,books] = await getHomeAll();    
+ //promise.all()返回的是一个数组，[]数组里每一项都是每个请求的返回值
+ // 数组的解构，di名字可以随便起，按照位置，第一个对应结果里的第一个
+```
+
+11、路由元信息--页面级缓存
+
+实现页面缓存用kekp-alive，但有很多路由页面，有的需要缓存，有的不用缓存，怎么实现分页面缓存
+配路由的时候加上属性： meta:{keepAlive:true} ,{path:'/home',component:Home,meta:{keepAlive:true}},取的时候在this.$route.meta.keepAlive
+
+```javascript
+export default new Router({
+  routes: [
+    {path:'/',redirect:'/home'},   //路径是/ 重定向到'/home'  这个路径；    {path:'/home',component:Home}这样写只是调用home组件，但路径 和下面的tab都没有变化
+    {path:'/home',component:Home,meta:{keepAlive:true}},   //取的时候在this.$route.meta.keepAlive
+    {path:'/lists',component:Lists},
+    {path:'/add',component:Add},
+    {path:'/collect',component:Collect},
+    {path:'/detail/:bookid',component:Detail,name:'detail'},    //路径参数，:bookid必须有，可以随机；
+    // 当访问的路径是 /detail/1 会产生一个对象{bookid:1} 放在$route.params上
+    {path:'*',redirect:'/home'}   //写在最后，如果是没找到的 也重定向到home路径，
+  ]
+})
+```
+缓存的是外层的组件，通过app.vue里的router-view
+```html
+<template>
+  <div id="app">
+    
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+
+     <router-view v-if="!$route.meta.keepAlive"></router-view>
+     <!-- 有两个router-view  一个放的需要缓存的，一个放的不需要缓存的 -->
+    
+  </div>
+</template>
+```

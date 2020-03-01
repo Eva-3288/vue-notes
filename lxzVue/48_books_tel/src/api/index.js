@@ -33,3 +33,7 @@ export let changeBook = (id,data)=>{
 export let addBook = (data)=>{
     return axios.post(`/book`,data);
 }
+// axios 是基于promise开发的，axios也有all方法
+export let getHomeAll = ()=>{  
+    return axios.all([getSliders(),getHot()]);   //当这两个方法都执行完后，返回一个promise对象
+}

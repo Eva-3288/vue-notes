@@ -71,6 +71,21 @@ http.createServer((req,res)=>{       //创建服务,两个参数，请求和响�
                 }
                 break;
             case 'POST':
+                let str = '';
+                req.on('data',chunk=>{
+                    str += chunk;
+                })
+                req.on('end',()=>{
+                    let book = JSON.parse(str);   
+                    read(function(books){    //读取数据
+                        book.id = books.length ? books[books.length-1].id+1 : 1;
+                        books.push(book);
+                         //现在书改好了，但是是放在内存中，还要用write方法写到数据里
+                        write(books,function(){   //将数据写回json中
+                            res.end(JSON.stringify(book));  //这个返回的结果实际不会用到
+                        })
+                    })
+                })
                 break;
             case 'PUT': 
                 if(id){   //获取了当前要修改的id

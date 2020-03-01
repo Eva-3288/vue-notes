@@ -19,13 +19,14 @@
                <input type="text" id="price" v-model="bookData.price">
            </li>
            <li>
-               <button >添加</button>
+               <button @click='add'>添加</button>
            </li>
         </ul>
     </div>
 </template>
 <script>   
     import mHeader from '../components/mHeader'; 
+    import {addBook} from '../api'
     export default {
         name:'add',
         data(){
@@ -35,6 +36,12 @@
         },
         components:{
             mHeader
+        },
+        methods:{
+            async add(){
+                await addBook(this.bookData);
+                this.$router.push('/lists');
+            }
         }
 
     }
