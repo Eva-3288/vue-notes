@@ -25,3 +25,11 @@ export let removeBook = (id)=>{
 export let findBook =(id)=>{
     return axios.get(`/book?id=${id}`);
 }
+// 修改图书
+export let changeBook = (id,data)=>{
+    return axios.put(`/book?id=${id}`,data);
+}
+// 添加图书
+export let addBook = (data)=>{
+    return axios.post(`/book`,data);
+}

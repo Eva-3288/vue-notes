@@ -53,7 +53,7 @@ http.createServer((req,res)=>{       //创建服务,两个参数，请求和响�
         let id = parseInt(query.id);  //取出来的是字符串--请求的数据的id 
         switch(req.method){    //判断请求的方法
             case 'GET':
-                if(id){  //查询一个
+                if(!isNaN(id)){  //查询一个  ,如果写if(id)  那id=0的时候，是查询一个，但把0转为false了，查了所有了
                     read(function(books){
                         let book = books.find(item=> {
                             return item.id === id;
@@ -73,6 +73,30 @@ http.createServer((req,res)=>{       //创建服务,两个参数，请求和响�
             case 'POST':
                 break;
             case 'PUT': 
+                if(id){   //获取了当前要修改的id
+                    //请求体是个流,先把他转成字符串
+                    let str = '';
+                    req.on('data',chunk=>{
+                        str += chunk;
+                    })
+                    req.on('end',()=>{
+                        let book = JSON.parse(str);   //将字符串改成对象，这里的book 就是修改后的数据
+                        read(function(books){    //读取数据
+                            books = books.map(item=>{
+                                if(item.id === id){   //找到要修改的项，改成book--上面获取到的请求体里的数据
+                                    return book;
+                                }
+                                return item;   //其他不需要改的返回当前想，如果不返回，就变成undefined了
+                            })
+
+                             //现在书改好了，但是是放在内存中，还要用write方法写到数据里
+                            write(books,function(){   //将数据写回json中
+                                res.end(JSON.stringify(book));  //这个返回的结果实际不会用到
+                            })
+                        })
+                       
+                    })
+                }
                 break;
             case 'DELETE':
                 read(function(books){

@@ -39,10 +39,11 @@ export default {
 <style scope lang = "less">
 @import '../assets/css/base.less';
 #header{
- background:#afd9ee;
+ background:@baseColor;
  text-align:center;
  height:40px;
  line-height:40px;
+ color:#fff;
 
  position:fixed;
  top:0;
