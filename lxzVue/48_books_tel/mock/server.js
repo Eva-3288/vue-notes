@@ -151,4 +151,24 @@ http.createServer((req,res)=>{       //创建服务,两个参数，请求和响�
         }
         return
     }
-}).listen(3000);   //默认端口8080，但8080用来跑前端服务了，所以这里后端的端口要换一个
+
+    // 静态服务，用来跑dist文件夹
+    //判断文件存不存在，把dist跑起来，能打开html
+    fs.stat("."+pathname,function(err,stats){    //读取一个路径
+        console.log(pathname);
+        
+        if(err){
+            res.statusCode = 404;
+            res.end("NOT FOUND")
+        }else{  
+            if(stats.isDirectory()){
+                let p = path.join('.' + pathname , './index.html');
+                fs.createReadStream(p).pipe(res);
+            }else{
+                fs.createReadStream('.'+pathname).pipe(res);
+                
+            }
+        }
+    })
+
+}).listen(3001);   //默认端口8080，但8080用来跑前端服务了，所以这里后端的端口要换一个

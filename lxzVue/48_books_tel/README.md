@@ -222,3 +222,45 @@ Vue.use(VueLazyload, {
   <!-- :src 换成 v-lazy ,会先显示个假的，等加载到真实图片，会替换成真图片 -->
    <img v-lazy="item.img" alt="">
 ```
+
+17、路由懒加载 --代码分割coding split
+如果把所有的文件打包成一个，会很大；而且如果项目很复杂也没法管理，所以需要优化
+
+vue优化--- 我们用到了代码分割 -- coding split：我们希望点一个页面就只加载当前页面的数据
+
+{path:'/add',component:()=>import('../pages/Add.vue')}  组件不再是引入的组件，而是一个函数，当页面路径和path对应时，会执行这个函数，这个函数去动态的载入组件
+
+```javascript
+/* 这样引用会把组件都打包到一个js里面，
+
+import Home from '../pages/Home.vue'
+import Lists from '../pages/Lists.vue'
+import Add from '../pages/Add.vue'
+import Collect from '../pages/Collect.vue'
+import Detail from '../pages/Detail.vue' 
+*/
+
+export default new Router({
+  routes: [
+    {path:'/',redirect:'/home'},   //路径是/ 重定向到'/home'  这个路径；    {path:'/home',component:Home}这样写只是调用home组件，但路径 和下面的tab都没有变化
+    {path:'/home',component:Home,meta:{keepAlive:true}},   //取的时候在this.$route.meta.keepAlive
+    {path:'/lists',component:()=>import('../pages/Lists.vue')},
+    {path:'/add',component:()=>import('../pages/Add.vue')},   //2.------路由懒加载：--- component:()=>{return import('../pages/Add.vue')}的缩写
+    //-----------1. 组件不再是引入的组件，而是一个函数，当页面路径和path对应时，会执行这个函数，这个函数去动态的载入组件
+    {path:'/collect',component:()=>import('../pages/Collect.vue')},
+    {path:'/detail/:bookid',component:Detail,name:'detail'},    //路径参数，:bookid必须有，可以随机；
+    // 当访问的路径是 /detail/1 会产生一个对象{bookid:1} 放在$route.params上
+    {path:'*',redirect:'/home'}   //写在最后，如果是没找到的 也重定向到home路径，
+  ]
+})
+```
+
+18、项目上线（发布项目）
+package.json： npm run build
+打包后直接运行不可以，需要放在http服务上，通过index.html打开
+本地文件不支持/css/...这种路径，要在服务上，上线的时dist文件夹
+还有我们写的后台server.js，以及我们要通过服务把html 跑起来
+
+服务分为动态的 和 静态的；我们写到逻辑都是动态的，要体统一个静态服务把页面跑起来；
+
+<!-- 1. 写一个静态服务，把dist 文件夹跑起来 -->
