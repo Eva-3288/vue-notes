@@ -9,7 +9,8 @@
                 <!-- to的属性值是对象，前面要加：，-->
                 <!-- router-link默认是a标签，我们可以用tag='li'改成li标签 -->
                 <router-link :to="{name:'detail',params:{bookid:item.id}}" tag="li" v-for="(item,index) in lists" :key="index">
-                    <img :src="item.img" alt="">
+                    <!-- <img :src="item.img" alt=""> -->
+                     <img v-lazy="item.img" alt="">
                     <div>
                         <p class="name">{{item.name}}</p>
                         <p class="info">{{item.info}}</p>

@@ -195,3 +195,30 @@ scrollMore(){
 
 先看lists 页面，也可以git上搜 pull - refresh
 vue-pull-to-refresh
+
+
+16、 图片懒加载--监听每个图片的onload,git上搜 vue-lazyload
+
+https://github.com/hilongjw/vue-lazyload
+
+```bash
+#安装
+$ npm i vue-lazyload -S
+```
+
+```javascript
+import VueLazyload from 'vue-lazyload'
+
+// 使用插件
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: 'dist/error.png',
+  loading: 'dist/loading.gif',
+  attempt: 1
+})
+```
+```html
+ <!-- <img :src="item.img" alt=""> -->
+  <!-- :src 换成 v-lazy ,会先显示个假的，等加载到真实图片，会替换成真图片 -->
+   <img v-lazy="item.img" alt="">
+```

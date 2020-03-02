@@ -11,7 +11,8 @@
                     <h3>热门图书</h3>
                     <ul class="hotBooks">
                         <li v-for="(item,index) in hots" :key="index">
-                            <img :src="item.img" alt="">
+                            <!-- <img :src="item.img" alt=""> -->
+                            <img v-lazy="item.img" alt="">
                             <p>{{item.name}}</p>
                         </li>
                     </ul>

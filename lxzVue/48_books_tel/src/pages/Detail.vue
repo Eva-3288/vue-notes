@@ -4,7 +4,8 @@
         <!-- {{$route.params.bookid}} 一般我们不在页面写这么长的，可以在计算属性里计算一下-->
         <ul class="box">
             <li>
-                <img :src="bookData.img">
+                <!-- <img :src="bookData.img"> -->
+                <img v-lazy="bookData.img">
             </li>
            <li>
                <label for="name">图书名称</label>
@@ -84,6 +85,7 @@
                  text-align: center;
                 // background: blue;
                 img{
+                    width:50%;
                     // border:1px solid #999;
                 }
              }

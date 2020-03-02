@@ -1,7 +1,8 @@
 <template>
   <swiper :options="swiperOption">
     <swiper-slide v-for="(slide, index) in swiperSlides" :key="index">
-        <img :src="slide">
+        <!-- <img :src="slide"> -->
+        <img v-lazy="slide">
     </swiper-slide>
     <div class="swiper-pagination" slot="pagination"></div>
   </swiper>
