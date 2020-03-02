@@ -95,7 +95,7 @@ export default new Router({
 ```html
 <template>
   <div id="app">
-    
+
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
@@ -106,3 +106,92 @@ export default new Router({
   </div>
 </template>
 ```
+
+12、路由动画
+```html
+<template>
+  <div id="app">
+    <transition name='fadeIn'>
+      <!-- keep-alive 缓存的是里面紧挨着一级的组件，所有transition标签要写在外面 -->
+      <!-- 需要缓存的走这里 -->
+        <keep-alive>
+          <router-view v-if="$route.meta.keepAlive"></router-view>
+        </keep-alive>
+    </transition>
+    
+    <transition name='fadeIn'>
+      <!-- 不需要缓存的走这里 -->
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </transition>
+     
+     <!-- 有两个router-view  一个放的需要缓存的，一个放的不需要缓存的 -->
+    <tab></tab>
+  </div>
+</template>
+
+<style>
+/* 路由动画 */
+.fadeIn-enter{
+  opacity:0;
+}
+.fadeIn-enter-active{
+  transition:all 0.3s linear;
+}
+.fadeIn-leave-active{
+  transition:all 0.3s linear;
+  opacity:0;
+}
+</style>
+```
+13、上滑 --加载更多
+
+默认每次请求加5条
+前端告诉后台现在要从第几条开始给数据
+/page?offset=10   就是从10开始给5个
+后台返回的数据里还有告诉前台是否还有更多的数据 hasMore:true;
+
+```javascript
+ //加载更多
+async getMoreData(){
+    // 有数据并且 不是正在加载 的时候去取数据
+    if(this.hasMore && !this.loading){    //有更多数据的时候获取数据 
+        this.loading = true;  //进到这里变成了正在加载了
+        let {hasMore,books} =  await getMore(this.offset);
+        this.lists  = [... this.lists,...books];    //列表里是之前的书 +  获取到的5条
+        this.hasMore = hasMore;
+        this.loading = false;   //加载完了，没有正在加载
+        // this.offset += 5;   //获取数据后更改offset--开始取数据的条数
+        this.offset = this.lists.length;   //维护偏移量就是总书的长度
+    }
+},
+```
+14、 列表页 滑到页尾自动加载--scroll事件，给有overflow:auto; 那一项加scroll事件
+dom 加载完成后mounted里加事件
+
+```html
+ <!-- 在dom上添加属性ref,然后通过$refs.scroll 获取这个dom元素，  scroll事件 -->
+<div class="content" ref='scroll' @scroll="scrollMore">
+    <!-- ... -->
+</div>
+```
+
+```javascript
+scrollMore(){ 
+    //触发scroll事件，可能触发n次，先进来开一个定时器，下次触发的时候将上一次的定时器清除调
+    // 防抖节流
+    clearTimeout(this.timer); //进后先清掉上次的定时器，然后开一个新的定时器
+    
+    this.timer = setTimeout(()=>{   //this.timer挂在了当前组件实例上了
+
+        // scrollTop 卷去的高度 + 元素.clientHeight 当前的可见区域的高度  +20 ==  元素的scrollHeight  元素总高;
+        let {scrollTop,clientHeight,scrollHeight} = this.$refs.scroll
+        if(scrollTop + clientHeight +20 > scrollHeight){
+            this.getMoreData();   //获取更多
+        }
+    },25)
+},
+```
+15、下拉刷新
+
+先看lists 页面，也可以git上搜 pull - refresh
+vue-pull-to-refresh

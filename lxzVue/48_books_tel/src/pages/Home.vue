@@ -26,7 +26,7 @@
 import loading from '../components/loading';
 import mHeader from '../components/mHeader';
 import swiper from '../components/swiper';
-import {getSliders,getHot,getHomeAll} from '../api'
+import {getSliders,getHot,getHomeAll,getMore} from '../api'
 
     export default {
         name:'add',
@@ -40,7 +40,7 @@ import {getSliders,getHot,getHomeAll} from '../api'
         components:{
             mHeader,
             swiper,
-            loading
+            loading,
         },
         // async created(){     //created里不要写太复杂的逻辑，我们放在methods里，然后再这里调用
         //     // 语法糖 async await  async 用于申明一个 function 是异步的，而 await 用于等待一个异步方法执行完成

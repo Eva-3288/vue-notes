@@ -37,3 +37,7 @@ export let addBook = (data)=>{
 export let getHomeAll = ()=>{  
     return axios.all([getSliders(),getHot()]);   //当这两个方法都执行完后，返回一个promise对象
 }
+//加载更多-根据偏移量5  返回对应的数据5-10
+export let getMore = (offset)=>{
+    return axios.get('/page?offset='+offset);
+}

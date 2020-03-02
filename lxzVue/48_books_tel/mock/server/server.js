@@ -34,6 +34,26 @@ http.createServer((req,res)=>{       //创建服务,两个参数，请求和响�
 
     let {pathname,query} = url.parse(req.url,true);    //url.parse()可以将一个完整的URL地址，分为很多部分并放在一个对象里，常用的有：host、port、pathname、path、query  
     //url.parse(req.url,true); 默认第二个参数是false,query返回的是 id=11&name=ll ;第二个参数是true的话，true把query转化成对象，query返回的是对象
+    
+    //加载更多
+    let pageSize = 5;  //每次请求显示5个
+    if(pathname === '/page'){
+        let offset = parseInt(query.offset) || 0;   //拿到前端传递的值
+        
+        read(function(books){
+            let result = books.reverse().slice(offset,offset+pageSize);   //每次在偏移的基础上增加5条
+            let hasMore = true;  //默认有更多
+            if(books.length <= offset+pageSize){
+                hasMore = false;
+            }
+            res.setHeader('Content-type','application/json;charset=utf-8');
+            setTimeout(()=>{   //模仿异步返回很慢，2s后返回
+                res.end(JSON.stringify({hasMore,books:result}))
+            },1000)
+        });
+        return;
+    }
+
     if(pathname === '/sliders'){
         res.setHeader('Content-type','application/json;charset=utf-8');  //编码格式，可不写
         return res.end(JSON.stringify(sliders));   //响应的时候返回字符串格式数据,一定要写return  跳出
